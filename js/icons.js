@@ -1,0 +1,461 @@
+/* VD·OS - pixel icon set.
+   Every icon is a 16×16 (or 8×8) grid; each char maps to a palette class:
+   k outline · w white · l light · g grey · d dark · a blue · A blue shade ·
+   y yellow · Y yellow shade · r red · t teal · G GrabYou green · H green shade · c currentColor */
+(function () {
+  const ICONS = {
+    txt: [
+      "..kkkkkkkkk.....",
+      "..kwwwwwwwkk....",
+      "..kwwwwwwwklk...",
+      "..kwwwwwwwkllk..",
+      "..kwwwwwwwkkkkk.",
+      "..kwwwwwwwwwwwk.",
+      "..kwkkkkkkkkwwk.",
+      "..kwwwwwwwwwwwk.",
+      "..kwkkkkkkwwwwk.",
+      "..kwwwwwwwwwwwk.",
+      "..kwkkkkkkkkwwk.",
+      "..kwwwwwwwwwwwk.",
+      "..kwaaaaawwwwwk.",
+      "..kwwwwwwwwwwwk.",
+      "..kkkkkkkkkkkkk.",
+      "................",
+    ],
+    folder: [
+      "................",
+      "................",
+      ".kkkkkk.........",
+      "kyyyyyykkkkkkkk.",
+      "kywwwwwwwwwwwwyk",
+      "kywyyyyyyyyyyyYk",
+      "kywyyyyyyyyyyyYk",
+      "kywyyyyyyyyyyyYk",
+      "kywyyyyyyyyyyyYk",
+      "kywyyyyyyyyyyyYk",
+      "kywyyyyyyyyyyyYk",
+      "kywyyyyyyyyyyyYk",
+      "kyYYYYYYYYYYYYYk",
+      "kkkkkkkkkkkkkkkk",
+      "................",
+      "................",
+    ],
+    computer: [
+      "................",
+      ".kkkkkkkkkkkkkk.",
+      ".kwlllllllllldk.",
+      ".kwlkkkkkkkkldk.",
+      ".kwlkttttttkldk.",
+      ".kwlkwtttttkldk.",
+      ".kwlktwttttkldk.",
+      ".kwlkwtwwwtkldk.",
+      ".kwlkkkkkkkkldk.",
+      ".kwlllllllllldk.",
+      ".kddddddddddadk.",
+      ".kkkkkkkkkkkkkk.",
+      "......kddk......",
+      "...kkkkkkkkkk...",
+      "...kllllllllk...",
+      "...kkkkkkkkkk...",
+    ],
+    mail: [
+      "................",
+      "................",
+      "................",
+      "kkkkkkkkkkkkkkkk",
+      "kkwwwwwwwwwwwwkk",
+      "kwkwwwwwwwwwwkwk",
+      "kwwkwwwwwwwwkwwk",
+      "kwwwkwwwwwwkwwwk",
+      "kwwwwkwwwwkwwwwk",
+      "kwwwwwkrrkwwwwwk",
+      "kwwwwwwkkwwwwwwk",
+      "kwwwwwwwwwwwwwwk",
+      "kllllllllllllllk",
+      "kkkkkkkkkkkkkkkk",
+      "................",
+      "................",
+    ],
+    plane: [
+      "................",
+      "................",
+      ".............kk.",
+      "...........kkwk.",
+      ".........kkwwwk.",
+      ".......kkwwwwak.",
+      ".....kkwwwwwkak.",
+      "...kkwwwwwwkaak.",
+      ".kkwwwwwwwkaaak.",
+      "..kkkkkwwkaaaak.",
+      "......kwkaaaak..",
+      "......kkkaaak...",
+      ".......kkaak....",
+      ".......kkak.....",
+      "........kk......",
+      "................",
+    ],
+    gear: [
+      "......kkkk......",
+      "......kwwk......",
+      "..kk..kwwk..kk..",
+      "..kwkkwwwlkklk..",
+      "...kwwwwllllk...",
+      "...kwwwkklllk...",
+      "kkkwwwk..klllkkk",
+      "kwwwwk....klgggk",
+      "kwwwlk....kggggk",
+      "kkklllk..kgggkkk",
+      "...klllkkgggk...",
+      "...kllllggggk...",
+      "..klkklgggkkgk..",
+      "..kk..kggk..kk..",
+      "......kggk......",
+      "......kkkk......",
+    ],
+    terminal: [
+      "................",
+      "kkkkkkkkkkkkkkkk",
+      "kaaaaaaaaaakwkwk",
+      "kkkkkkkkkkkkkkkk",
+      "kwwwwwwwwwwwwwwk",
+      "kwkwwwwwwwwwwwwk",
+      "kwwkwwwwwwwwwwwk",
+      "kwwwkwwwwwwwwwwk",
+      "kwwkwwwwwwwwwwwk",
+      "kwkwwwkkkkwwwwwk",
+      "kwwwwwwwwwwwwwwk",
+      "kwwwwwwwwwwwwwwk",
+      "kllllllllllllllk",
+      "kkkkkkkkkkkkkkkk",
+      "................",
+      "................",
+    ],
+    chip: [
+      "................",
+      "....k.k..k.k....",
+      "....k.k..k.k....",
+      "..kkkkkkkkkkkk..",
+      "kkkwwwwwwwwwwkkk",
+      "..kwlllllllldk..",
+      "kkkwlkkkkkkldkkk",
+      "..kwlkyyyykldk..",
+      "..kwlkyYYykldk..",
+      "kkkwlkyyyykldkkk",
+      "..kwlkkkkkkldk..",
+      "kkkwlllllllldkkk",
+      "..kddddddddddk..",
+      "..kkkkkkkkkkkk..",
+      "....k.k..k.k....",
+      "....k.k..k.k....",
+    ],
+    cap: [
+      "................",
+      "................",
+      ".......kk.......",
+      ".....kkddkk.....",
+      "...kkddddddkk...",
+      ".kkddddkkddddkk.",
+      "kddddddkkddddddk",
+      ".kkddddddddddky.",
+      "...kkddddddkk.y.",
+      "...kgkkkkkkgk.y.",
+      "...kggggggggk.y.",
+      "...kggggggggkyyy",
+      "...kkggggggkkyyy",
+      ".....kkkkkk.....",
+      "................",
+      "................",
+    ],
+    globe: [
+      "................",
+      ".....kkkkkk.....",
+      "...kkwaAAaakk...",
+      "..kwwaAaaAaaak..",
+      "..kwaAaaaaAaak..",
+      ".kwaaAaaaaAaaak.",
+      ".kaaAaaaaaaAaak.",
+      ".kAAAAAAAAAAAAk.",
+      ".kaaAaaaaaaAaak.",
+      ".kaaaAaaaaAaaak.",
+      "..kaaAaaaaAaak..",
+      "..kaaaAaaAaaak..",
+      "...kkaaAAaakk...",
+      ".....kkkkkk.....",
+      "................",
+      "................",
+    ],
+    bag: [
+      "................",
+      "......kkkk......",
+      ".....kk..kk.....",
+      ".....k....k.....",
+      "..kkkkkkkkkkkk..",
+      "..kwGGGGGGGGHk..",
+      "..kwGGGGkGGGHk..",
+      "..kwGGGkkGGGHk..",
+      "..kwGGkkkkGGHk..",
+      "..kwGGGkkGGGHk..",
+      "..kwGGGkGGGGHk..",
+      "..kwGGGGGGGGHk..",
+      "..kHHHHHHHHHHk..",
+      "..kkkkkkkkkkkk..",
+      "................",
+      "................",
+    ],
+    branch: [
+      "................",
+      "...kk...........",
+      "..kwwk..........",
+      "..kwwk..........",
+      "...kk......kk...",
+      "...kk.....kaak..",
+      "...kk.....kaak..",
+      "...kk......kk...",
+      "...kk......kk...",
+      "...kk.....kk....",
+      "...kk...kkk.....",
+      "...kkkkkk.......",
+      "..kwwk..........",
+      "..kwwk..........",
+      "...kk...........",
+      "................",
+    ],
+    megaphone: [
+      "................",
+      "...........k....",
+      ".........kkk....",
+      ".......kkGGk....",
+      ".....kkGGGGk.k..",
+      ".kkkkGGGGGGk..k.",
+      ".klllGGGGGGk..k.",
+      ".klllGGGGGGk..k.",
+      ".kkkkGGGGGGk..k.",
+      ".....kGGGGGk.k..",
+      ".....kgGkGGk....",
+      ".....kgk.kkk....",
+      ".....kgk...k....",
+      ".....kgk........",
+      ".....kkk........",
+      "................",
+    ],
+    power: [
+      ".......kk.......",
+      ".......kk.......",
+      ".......kk.......",
+      "...kk..kk..kk...",
+      "..krrk.kk.krrk..",
+      "..krk..kk..krk..",
+      ".krrk..kk..krrk.",
+      ".krk...kk...krk.",
+      ".krk...kk...krk.",
+      ".krrk......krrk.",
+      "..krk......krk..",
+      "..krrkk..kkrrk..",
+      "...krrrkkrrrk...",
+      "....kkrrrrkk....",
+      "......kkkk......",
+      "................",
+    ],
+    bubble: [
+      "................",
+      "..kkkkkkkkkkkk..",
+      ".kyyyyyyyyyyyyk.",
+      ".kyyyyykkyyyyyk.",
+      ".kyyyyykkyyyyyk.",
+      ".kyyyyykkyyyyyk.",
+      ".kyyyyykkyyyyyk.",
+      ".kyyyyyyyyyyyyk.",
+      ".kyyyyykkyyyyyk.",
+      ".kYYYYYYYYYYYYk.",
+      "..kkkkkkkkkkkk..",
+      "....kYk.........",
+      "....kk..........",
+      "....k...........",
+      "................",
+      "................",
+    ],
+    trash: [
+      "................",
+      "......kkkk......",
+      "..kkkkkkkkkkkk..",
+      "..kwlllllllldk..",
+      "..kkkkkkkkkkkk..",
+      "...kwlklklkdk...",
+      "...kwlklklkdk...",
+      "...kwlklklkdk...",
+      "...kwlklklkdk...",
+      "...kwlklklkdk...",
+      "...kwlklklkdk...",
+      "...kwlklklkdk...",
+      "...kwlklklkdk...",
+      "...kddddddddk...",
+      "....kkkkkkkk....",
+      "................",
+    ],
+    logo: [
+      "kkkkkkkkkkkkkkkk",
+      "kaaaaaaaaaaaaaak",
+      "kaaaaaaaaaaaaaak",
+      "kaaaaaaaaaaaaaak",
+      "kawaaawaawwwwaak",
+      "kawaaawaawaaawak",
+      "kawaaawaawaaawak",
+      "kawaaawaawaaawak",
+      "kaawawaaawaaawak",
+      "kaawawaaawaaawak",
+      "kaaawaaaawwwwaak",
+      "kaaaaaaaaaaaaaak",
+      "kaaaaaaaaaaaaaak",
+      "kkkkkkkkkkkkkkkk",
+      "kyyyyyyyyyyyyyyk",
+      "kkkkkkkkkkkkkkkk",
+    ],
+    /* 8×8 window controls, drawn in currentColor */
+    "ctl-min": [
+      "........",
+      "........",
+      "........",
+      "........",
+      "........",
+      "cccccc..",
+      "cccccc..",
+      "........",
+    ],
+    "ctl-max": [
+      "ccccccc.",
+      "ccccccc.",
+      "c.....c.",
+      "c.....c.",
+      "c.....c.",
+      "c.....c.",
+      "ccccccc.",
+      "........",
+    ],
+    "ctl-restore": [
+      "..ccccc.",
+      "..ccccc.",
+      "ccccc.c.",
+      "ccccc.c.",
+      "c...ccc.",
+      "c...c...",
+      "ccccc...",
+      "........",
+    ],
+    "ctl-close": [
+      "cc...cc.",
+      ".cc.cc..",
+      "..ccc...",
+      "..ccc...",
+      ".cc.cc..",
+      "cc...cc.",
+      "........",
+      "........",
+    ],
+    "ctl-arrow": [
+      "........",
+      "...c....",
+      "...cc...",
+      "cccccc..",
+      "cccccc..",
+      "...cc...",
+      "...c....",
+      "........",
+    ],
+  };
+
+  const CURSORS = {
+    arrow: { hot: [1, 1], grid: [
+      "k...........",
+      "kk..........",
+      "kwk.........",
+      "kwwk........",
+      "kwwwk.......",
+      "kwwwwk......",
+      "kwwwwwk.....",
+      "kwwwwwwk....",
+      "kwwwwwwwk...",
+      "kwwwwwwwwk..",
+      "kwwwwwkkkkk.",
+      "kwwkwwk.....",
+      "kwk.kwwk....",
+      "kk..kwwk....",
+      "k....kwwk...",
+      ".....kwwk...",
+      "......kk....",
+    ] },
+    hand: { hot: [9, 1], grid: [
+      "....kk..........",
+      "...kwwk.........",
+      "...kwwk.........",
+      "...kwwk.........",
+      "...kwwkkk.......",
+      "...kwwkwwkkk....",
+      "...kwwkwwkwwkk..",
+      "kk.kwwkwwkwwkwk.",
+      "kwkkwwwwwwwwkwk.",
+      "kwwkwwwwwwwwwwk.",
+      ".kwwwwwwwwwwwwk.",
+      ".kwwwwwwwwwwwwk.",
+      "..kwwwwwwwwwwwk.",
+      "..kwwwwwwwwwwk..",
+      "...kwwwwwwwwwk..",
+      "...kwwwwwwwwwk..",
+      "...kkkkkkkkkkk..",
+    ] },
+  };
+
+  function rects(grid) {
+    let out = "";
+    grid.forEach((row, y) => {
+      let x = 0;
+      while (x < row.length) {
+        const ch = row[x];
+        if (ch === ".") { x++; continue; }
+        let w = 1;
+        while (x + w < row.length && row[x + w] === ch) w++;
+        out += `<rect x="${x}" y="${y}" width="${w}" height="1" class="px-${ch}"/>`;
+        x += w;
+      }
+    });
+    return out;
+  }
+
+  function svg(name, size) {
+    const grid = ICONS[name];
+    if (!grid) return "";
+    const n = grid[0].length;
+    const s = size || n * 2;
+    return `<svg viewBox="0 0 ${n} ${grid.length}" width="${s}" height="${s}" shape-rendering="crispEdges" aria-hidden="true" focusable="false">${rects(grid)}</svg>`;
+  }
+
+  /* Cursors need literal colors: data-URI SVGs can't read page CSS. */
+  function cursorURI(name) {
+    const c = CURSORS[name];
+    const map = { k: "#121211", w: "#FFFFFF" };
+    let body = "";
+    c.grid.forEach((row, y) => {
+      let x = 0;
+      while (x < row.length) {
+        const ch = row[x];
+        if (ch === ".") { x++; continue; }
+        let w = 1;
+        while (x + w < row.length && row[x + w] === ch) w++;
+        body += `<rect x='${x}' y='${y}' width='${w}' height='1' fill='${map[ch]}'/>`;
+        x += w;
+      }
+    });
+    const W = c.grid[0].length, H = c.grid.length;
+    const svgS = `<svg xmlns='http://www.w3.org/2000/svg' width='${W * 2}' height='${H * 2}' viewBox='0 0 ${W} ${H}' shape-rendering='crispEdges'>${body}</svg>`;
+    return `url("data:image/svg+xml,${encodeURIComponent(svgS)}") ${c.hot[0]} ${c.hot[1]}`;
+  }
+
+  function hydrate(root) {
+    (root || document).querySelectorAll("[data-icon]").forEach((el) => {
+      if (el.dataset.iconDone) return;
+      el.innerHTML = svg(el.dataset.icon, Number(el.dataset.size) || undefined);
+      el.dataset.iconDone = "1";
+    });
+  }
+
+  window.PixelIcons = { svg, hydrate, cursorURI, names: Object.keys(ICONS) };
+})();

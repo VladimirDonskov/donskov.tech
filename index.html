@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Vladimir Donskov - VD·OS</title>
+  <meta name="description" content="Владимир Донсков - разработчик ПО и предприниматель. Backend на Java и Python, API, базы данных. Основатель GrabYou. Студент Университета ИТМО.">
+  <meta name="author" content="Vladimir Donskov">
+  <meta name="theme-color" content="#D8D5CB">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Vladimir Donskov - developer & entrepreneur">
+  <meta property="og:description" content="Backend на Java и Python, API, базы данных. Основатель GrabYou.">
+  <link rel="canonical" href="https://donskov.tech/">
+  <meta property="og:url" content="https://donskov.tech/">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Geist:wght@300..900&family=JetBrains+Mono:wght@400..800&family=Pixelify+Sans:wght@500..700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    /* Light by default; dark only if the visitor picked it. Applied before first paint. */
+    (function () {
+      var d = document.documentElement, p = {};
+      try { p = JSON.parse(localStorage.getItem("vdos-prefs") || "{}"); } catch (e) {}
+      d.setAttribute("data-theme", p.theme === "dark" ? "dark" : "light");
+      d.className = "js" + (p.crt ? " crt-on" : "");
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip" href="#about-sec" data-i18n="skip">Перейти к содержимому</a>
+
+  <!-- ============ BOOT ============ -->
+  <div class="boot" id="boot" hidden aria-hidden="true">
+    <div class="boot__inner">
+      <div class="boot__logo"><span data-icon="logo" data-size="64"></span><span>VD·OS</span></div>
+      <div class="boot__lines" id="bootLines"></div>
+      <div class="boot__bar" id="bootBar"></div>
+      <p class="boot__skip" data-i18n="boot.skip">нажмите любую клавишу, чтобы пропустить</p>
+    </div>
+  </div>
+
+  <div class="crt" aria-hidden="true"></div>
+
+  <main class="desktop" id="top">
+
+    <!-- ============ TOP STRIP ============ -->
+    <header class="topstrip">
+      <div class="topstrip__brand">
+        <span data-icon="logo" data-size="20"></span>
+        <b>VD·OS</b><span class="muted">2.6</span>
+      </div>
+      <div class="topstrip__path">C:\USERS\VLADIMIR\DESKTOP</div>
+      <div class="topstrip__date"><span class="led"></span><span id="topDate">-</span></div>
+    </header>
+
+    <!-- ============ HERO / DESKTOP ============ -->
+    <section class="hero" aria-label="Рабочий стол">
+      <nav class="icons" id="icons" aria-label="Ярлыки">
+        <button class="dicon" type="button" data-open="#about"><span class="dicon__img" data-icon="txt" data-size="40"></span><span class="dicon__label">about.txt</span></button>
+        <button class="dicon" type="button" data-open="#stack"><span class="dicon__img" data-icon="chip" data-size="40"></span><span class="dicon__label">stack.sys</span></button>
+        <button class="dicon" type="button" data-open="#grabyou"><span class="dicon__img" data-icon="bag" data-size="40"></span><span class="dicon__label">grabyou.exe</span></button>
+        <button class="dicon" type="button" data-open="#projects"><span class="dicon__img" data-icon="folder" data-size="40"></span><span class="dicon__label">projects</span></button>
+        <button class="dicon" type="button" data-open="#contact"><span class="dicon__img" data-icon="mail" data-size="40"></span><span class="dicon__label">contact.msg</span></button>
+        <button class="dicon" type="button" data-action="terminal"><span class="dicon__img" data-icon="terminal" data-size="40"></span><span class="dicon__label">run.exe</span></button>
+        <button class="dicon" type="button" data-action="settings"><span class="dicon__img" data-icon="gear" data-size="40"></span><span class="dicon__label">user.config</span></button>
+        <button class="dicon" type="button" data-action="trash"><span class="dicon__img" data-icon="trash" data-size="40"></span><span class="dicon__label">recycle.bin</span></button>
+      </nav>
+
+      <article class="win win--hero" id="hello" data-task="hello.exe" data-reveal>
+        <header class="win__bar">
+          <span class="win__ico" data-icon="computer" data-size="16"></span>
+          <span class="win__name">vladimir_donskov.exe</span>
+          <span class="win__grip" aria-hidden="true"></span>
+        </header>
+        <div class="win__body hello">
+          <div class="hello__meta">
+            <span>// PERSONAL SYSTEM</span>
+            <span>BUILD 26.10</span>
+            <span class="hide-sm">59.94°N 30.31°E</span>
+          </div>
+          <h1 class="hello__name" id="heroName" aria-label="Vladimir Donskov">
+            <span class="hello__line" aria-hidden="true">VLADIMIR</span>
+            <span class="hello__line" aria-hidden="true">DONSKOV<i class="blockcursor"></i></span>
+          </h1>
+          <div class="hello__grid">
+            <div>
+              <p class="hello__role"><span class="prompt">&gt;</span> <span id="typed">backend-разработчик</span><i class="caret" aria-hidden="true"></i></p>
+              <p class="hello__lead" data-i18n="hero.lead">Разработчик ПО и&nbsp;предприниматель. Проектирую backend на&nbsp;Java и&nbsp;Python, строю API и&nbsp;базы данных&nbsp;- и&nbsp;запускаю собственные продукты.</p>
+            </div>
+            <div class="hello__cta">
+              <a class="btn btn--accent" href="https://t.me/CipaVibe" target="_blank" rel="noopener"><span data-icon="plane" data-size="20"></span><span data-i18n="cta.tg">Написать в Telegram</span></a>
+              <a class="btn" href="https://github.com/VladimirDonskov" target="_blank" rel="noopener"><span data-icon="branch" data-size="20"></span><span>GitHub</span></a>
+            </div>
+          </div>
+        </div>
+        <footer class="win__status">
+          <span><i class="led"></i>READY</span>
+          <span>JAVA · PYTHON · BACKEND</span>
+          <span class="hide-sm">ITMO</span>
+          <span class="push">GRABYOU</span>
+        </footer>
+      </article>
+
+      <div class="hero__side">
+        <section class="win win--side" id="sysinfo" data-drag data-reveal aria-label="system.info">
+          <header class="win__bar">
+            <span class="win__ico" data-icon="chip" data-size="16"></span>
+            <span class="win__name">system.info</span>
+            <span class="win__grip" aria-hidden="true"></span>
+          </header>
+          <div class="win__body">
+            <dl class="kv">
+              <div><dt>USER</dt><dd>Vladimir Donskov</dd></div>
+              <div><dt>ROLE</dt><dd data-i18n="sys.role">Разработчик · Предприниматель</dd></div>
+              <div><dt>FOCUS</dt><dd>Backend · Java · Python</dd></div>
+              <div><dt>EDU</dt><dd data-i18n="sys.edu">Университет ИТМО</dd></div>
+              <div><dt>LOCALE</dt><dd>RU · EN B2 · IT B1</dd></div>
+              <div><dt>BASE</dt><dd data-i18n="sys.base">Санкт-Петербург</dd></div>
+              <div><dt>STATUS</dt><dd><i class="led"></i>ONLINE</dd></div>
+            </dl>
+          </div>
+        </section>
+
+        <section class="win win--side win--log" id="statuslog" data-drag data-reveal aria-label="status.log">
+          <header class="win__bar">
+            <span class="win__ico" data-icon="terminal" data-size="16"></span>
+            <span class="win__name">status.log</span>
+            <span class="win__grip" aria-hidden="true"></span>
+          </header>
+          <div class="win__body">
+            <ol class="log" id="log"></ol>
+          </div>
+          <footer class="win__status">
+            <span>tail -f</span>
+            <span class="push" id="logCount">0 lines</span>
+          </footer>
+        </section>
+      </div>
+    </section>
+
+    <!-- ============ 01 ABOUT ============ -->
+    <section class="section" id="about-sec">
+      <header class="sec-head">
+        <span class="sec-head__idx">[01]</span>
+        <h2 class="sec-head__title">About<span class="sec-head__slash">/</span>me</h2>
+        <p class="sec-head__cap" data-i18n="about.cap">// кто я и&nbsp;чем занимаюсь</p>
+      </header>
+      <div class="ruler" aria-hidden="true"></div>
+
+      <article class="win" id="about" data-task="about.txt" data-reveal>
+        <header class="win__bar">
+          <span class="win__ico" data-icon="txt" data-size="16"></span>
+          <span class="win__name">about.txt</span>
+          <span class="win__grip" aria-hidden="true"></span>
+        </header>
+        <div class="win__body about">
+          <div class="about__lead">
+            <p class="kicker">// SUMMARY</p>
+            <p class="about__big" data-i18n="about.big">Объединяю техническую экспертизу с&nbsp;<mark>предпринимательским мышлением</mark>.</p>
+            <dl class="specs">
+              <div><dt data-i18n="spec.role">Роль</dt><dd>Software Developer &amp; Entrepreneur</dd></div>
+              <div><dt data-i18n="spec.focus">Фокус</dt><dd>Backend · Java · Python</dd></div>
+              <div><dt data-i18n="spec.arch">Умею</dt><dd data-i18n="spec.arch.v">Архитектура · API · базы данных</dd></div>
+              <div><dt data-i18n="spec.biz">Бизнес</dt><dd data-i18n="spec.biz.v">GrabYou - основатель</dd></div>
+            </dl>
+          </div>
+          <div class="editor" id="aboutText">
+            <div class="editor__line"><span class="editor__num">01</span><p data-i18n="about.p1">Я&nbsp;- разработчик программного обеспечения и&nbsp;предприниматель, студент Университета ИТМО по&nbsp;направлению «Разработка программного обеспечения».</p></div>
+            <div class="editor__line"><span class="editor__num">02</span><p data-i18n="about.p2">Специализируюсь на&nbsp;backend-разработке с&nbsp;использованием Java и&nbsp;Python, проектировании архитектуры приложений, создании API и&nbsp;работе с&nbsp;базами данных. Имею опыт разработки как собственных цифровых продуктов, так и&nbsp;сторонних коммерческих и&nbsp;промышленных проектов, где особое внимание уделяю надёжности, масштабируемости и&nbsp;качеству программных решений.</p></div>
+            <div class="editor__line"><span class="editor__num">03</span><p data-i18n="about.p3">Помимо программирования, активно занимаюсь предпринимательской деятельностью. Создаю и&nbsp;развиваю собственные IT-проекты, в&nbsp;том числе GrabYou. Занимаюсь не&nbsp;только технической реализацией, но&nbsp;и&nbsp;формированием бизнес-моделей, управлением командой, продуктовой стратегией и&nbsp;организацией процессов&nbsp;- от&nbsp;первоначальной идеи до&nbsp;запуска продукта на&nbsp;рынок.</p></div>
+            <div class="editor__line"><span class="editor__num">04</span><p data-i18n="about.p4">Стремлюсь объединять техническую экспертизу с&nbsp;предпринимательским мышлением, создавая решения, которые не&nbsp;просто работают, а&nbsp;решают реальные задачи пользователей и&nbsp;бизнеса.<i class="caret" aria-hidden="true"></i></p></div>
+          </div>
+        </div>
+        <footer class="win__status">
+          <span>Ln 4, Col 1</span>
+          <span>UTF-8</span>
+          <span class="hide-sm" id="aboutChars">-</span>
+          <span class="push"><i class="led"></i><span data-i18n="about.saved">сохранено</span></span>
+        </footer>
+      </article>
+    </section>
+
+    <!-- ============ 02 STACK ============ -->
+    <section class="section" id="stack-sec">
+      <header class="sec-head">
+        <span class="sec-head__idx">[02]</span>
+        <h2 class="sec-head__title">Stack</h2>
+        <p class="sec-head__cap" data-i18n="stack.cap">// языки, фреймворки, базы данных и&nbsp;инструменты</p>
+      </header>
+      <div class="ruler" aria-hidden="true"></div>
+
+      <article class="win" id="stack" data-task="stack.sys" data-reveal>
+        <header class="win__bar">
+          <span class="win__ico" data-icon="chip" data-size="16"></span>
+          <span class="win__name">stack.sys</span>
+          <span class="win__grip" aria-hidden="true"></span>
+        </header>
+        <div class="win__toolbar tabs" role="group" aria-label="Фильтр" id="stackTabs">
+          <button class="tab is-on" type="button" data-filter="all" aria-pressed="true"><span data-i18n="tab.all">Все</span><b data-count="all"></b></button>
+          <button class="tab" type="button" data-filter="lang" aria-pressed="false"><span data-i18n="tab.lang">Языки</span><b data-count="lang"></b></button>
+          <button class="tab" type="button" data-filter="fw" aria-pressed="false"><span data-i18n="tab.fw">Фреймворки</span><b data-count="fw"></b></button>
+          <button class="tab" type="button" data-filter="db" aria-pressed="false"><span data-i18n="tab.db">Базы данных</span><b data-count="db"></b></button>
+          <button class="tab" type="button" data-filter="tools" aria-pressed="false"><span data-i18n="tab.tools">Инструменты</span><b data-count="tools"></b></button>
+          <button class="tab" type="button" data-filter="concepts" aria-pressed="false"><span data-i18n="tab.concepts">Концепции</span><b data-count="concepts"></b></button>
+        </div>
+        <div class="win__body stack" id="stackBody" data-filter="all">
+          <section class="panel panel--keys" data-cat="lang">
+            <header class="panel__head"><span>C:\STACK\LANGUAGES\</span><span class="panel__n"></span></header>
+            <div class="keys">
+              <button class="key key--core key--wide" type="button" data-desc="key.java"><span class="key__ext">.java</span><span class="key__name">Java</span><span class="key__tag">core</span></button>
+              <button class="key key--core key--wide" type="button" data-desc="key.python"><span class="key__ext">.py</span><span class="key__name">Python</span><span class="key__tag">core</span></button>
+              <button class="key" type="button" data-desc="key.cpp"><span class="key__ext">.cpp</span><span class="key__name">C++</span></button>
+              <button class="key" type="button" data-desc="key.cs"><span class="key__ext">.cs</span><span class="key__name">C#</span></button>
+              <button class="key" type="button" data-desc="key.sql"><span class="key__ext">.sql</span><span class="key__name">SQL</span></button>
+              <button class="key" type="button" data-desc="key.js"><span class="key__ext">.js</span><span class="key__name">JavaScript</span></button>
+              <button class="key" type="button" data-desc="key.html"><span class="key__ext">.html</span><span class="key__name">HTML</span></button>
+              <button class="key" type="button" data-desc="key.css"><span class="key__ext">.css</span><span class="key__name">CSS</span></button>
+            </div>
+          </section>
+
+          <section class="panel" data-cat="fw">
+            <header class="panel__head"><span>frameworks/</span><span class="panel__n"></span></header>
+            <ul class="list">
+              <li><span class="list__name">FastAPI</span><span class="list__tag">python · api</span></li>
+              <li><span class="list__name">React</span><span class="list__tag">js · ui</span></li>
+              <li><span class="list__name">SQLAlchemy</span><span class="list__tag">python · orm</span></li>
+              <li><span class="list__name">aiogram</span><span class="list__tag">python · bots</span></li>
+              <li><span class="list__name">Zustand</span><span class="list__tag">js · state</span></li>
+              <li><span class="list__name">Pytest</span><span class="list__tag">python · test</span></li>
+              <li><span class="list__name">xUnit</span><span class="list__tag">c# · test</span></li>
+              <li><span class="list__name">JUnit</span><span class="list__tag">java · test</span></li>
+            </ul>
+            <div class="panel__art" aria-hidden="true">
+<pre>$ pip install fastapi sqlalchemy
+$ npm i react zustand
+<span class="ok-line">✓ dependencies resolved</span></pre>
+            </div>
+          </section>
+
+          <section class="panel" data-cat="db">
+            <header class="panel__head"><span>databases/</span><span class="panel__n"></span></header>
+            <ul class="list">
+              <li><span class="list__name">PostgreSQL</span><span class="list__tag">sql</span></li>
+              <li><span class="list__name">ClickHouse</span><span class="list__tag">olap</span></li>
+              <li><span class="list__name">Redis</span><span class="list__tag">in-memory</span></li>
+              <li><span class="list__name">Firebase</span><span class="list__tag">baas</span></li>
+              <li><span class="list__name">Supabase</span><span class="list__tag">baas · pg</span></li>
+            </ul>
+            <div class="panel__art" aria-hidden="true">
+<pre>  ┌──────┐
+  │ ░░░░ │──┐
+  │ ▓▓▓▓ │  │
+  └──┬───┘  ▼
+     └──► SELECT *</pre>
+            </div>
+          </section>
+
+          <section class="panel" data-cat="tools">
+            <header class="panel__head"><span>tools/</span><span class="panel__n"></span></header>
+            <ul class="list">
+              <li><span class="list__name">Git</span><span class="list__tag">vcs</span></li>
+              <li><span class="list__name">GitHub</span><span class="list__tag">vcs</span></li>
+              <li><span class="list__name">Docker</span><span class="list__tag">containers</span></li>
+              <li><span class="list__name">GitHub Actions</span><span class="list__tag">ci/cd</span></li>
+              <li><span class="list__name">Gradle</span><span class="list__tag">build</span></li>
+              <li><span class="list__name">Maven</span><span class="list__tag">build</span></li>
+              <li><span class="list__name">CMake</span><span class="list__tag">build</span></li>
+              <li><span class="list__name">Android Studio</span><span class="list__tag">ide</span></li>
+              <li><span class="list__name">JetBrains Rider</span><span class="list__tag">ide</span></li>
+              <li><span class="list__name">Swagger</span><span class="list__tag">api docs</span></li>
+              <li><span class="list__name">Vite</span><span class="list__tag">bundler</span></li>
+            </ul>
+          </section>
+
+          <section class="panel panel--wide" data-cat="concepts">
+            <header class="panel__head"><span>concepts/</span><span class="panel__n"></span></header>
+            <ul class="chips">
+              <li class="chip">OOP</li>
+              <li class="chip">SOLID</li>
+              <li class="chip">GRASP</li>
+              <li class="chip">Design Patterns</li>
+              <li class="chip">REST API</li>
+              <li class="chip">WebSockets</li>
+              <li class="chip">JWT Authentication</li>
+              <li class="chip">Database Design</li>
+              <li class="chip">Unit Testing</li>
+              <li class="chip">CI/CD</li>
+              <li class="chip">Backend Development</li>
+              <li class="chip">API Integration</li>
+              <li class="chip">Git Workflow</li>
+            </ul>
+          </section>
+        </div>
+        <footer class="win__status">
+          <span id="stackStatus">-</span>
+          <span class="push" id="stackHint" data-i18n="stack.hint">нажмите на&nbsp;клавишу</span>
+        </footer>
+      </article>
+    </section>
+
+    <!-- ============ 03 BUSINESS ============ -->
+    <section class="section" id="grabyou-sec">
+      <header class="sec-head">
+        <span class="sec-head__idx">[03]</span>
+        <h2 class="sec-head__title">Business</h2>
+        <p class="sec-head__cap" data-i18n="biz.cap">// собственный продукт - от&nbsp;идеи до&nbsp;рынка</p>
+      </header>
+      <div class="ruler" aria-hidden="true"></div>
+
+      <article class="win win--wizard" id="grabyou" data-task="grabyou.exe" data-reveal>
+        <header class="win__bar">
+          <span class="win__ico" data-icon="bag" data-size="16"></span>
+          <span class="win__name">grabyou_setup.exe</span>
+          <span class="win__grip" aria-hidden="true"></span>
+        </header>
+        <div class="win__body wizard">
+          <aside class="wizard__side" aria-hidden="true">
+            <span data-icon="bag" data-size="96"></span>
+            <span class="wizard__word">GrabYou</span>
+            <span class="wizard__ver">SETUP · LIVE</span>
+          </aside>
+          <div class="wizard__main">
+            <p class="kicker" data-i18n="biz.kicker">МАСТЕР УСТАНОВКИ · РОЛЬ: ОСНОВАТЕЛЬ</p>
+            <h3 class="wizard__title" data-i18n="biz.title">Хватай выгоду, пока горячо.</h3>
+            <p class="wizard__text" data-i18n="biz.text"><b>GrabYou</b>&nbsp;- маркетплейс срочных предложений от&nbsp;локального бизнеса. Кофейни, пекарни, цветочные и&nbsp;кафе показывают, что прямо сейчас продаётся дешевле рядом с&nbsp;вами: оплатил в&nbsp;приложении&nbsp;- пришёл и&nbsp;забрал.</p>
+
+            <div class="wizard__cols">
+              <div>
+                <p class="mini-head" data-i18n="biz.do">Что я делаю в проекте</p>
+                <ul class="checklist">
+                  <li class="is-done" data-i18n="biz.c1">Бизнес-модель</li>
+                  <li class="is-done" data-i18n="biz.c2">Техническая реализация</li>
+                  <li class="is-done" data-i18n="biz.c3">Управление командой</li>
+                  <li class="is-done" data-i18n="biz.c4">Продуктовая стратегия</li>
+                  <li class="is-done" data-i18n="biz.c5">Организация процессов</li>
+                  <li class="is-run" data-i18n="biz.c6">Рост продукта</li>
+                </ul>
+              </div>
+              <div>
+                <p class="mini-head" data-i18n="biz.path">Путь продукта</p>
+                <div class="pipeline">
+                  <div class="pipeline__bar" id="pipeBar"></div>
+                  <ol class="pipeline__steps">
+                    <li>IDEA</li><li>MVP</li><li>LAUNCH</li><li class="is-now">GROWTH</li>
+                  </ol>
+                </div>
+                <p class="wizard__note" data-i18n="biz.note">Хорошие товары находят покупателя вовремя&nbsp;- потребление становится осознанным и&nbsp;выгодным для&nbsp;всех.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <footer class="wizard__foot">
+          <button class="btn hide-sm" type="button" disabled>&lt; <span data-i18n="biz.back">Назад</span></button>
+          <a class="btn" href="https://t.me/GrabYouOfficial" target="_blank" rel="noopener"><span data-icon="megaphone" data-size="20"></span><span data-i18n="biz.channel">Telegram-канал</span></a>
+          <a class="btn btn--grab" href="https://grabyou.ru" target="_blank" rel="noopener"><span data-i18n="biz.open">Открыть grabyou.ru</span> &gt;</a>
+        </footer>
+        <footer class="win__status">
+          <span><i class="led"></i>STATUS: LIVE</span>
+          <span>grabyou.ru</span>
+          <span class="push hide-sm">t.me/GrabYouOfficial</span>
+        </footer>
+      </article>
+    </section>
+
+    <!-- ============ 04 PROJECTS ============ -->
+    <section class="section" id="projects-sec">
+      <header class="sec-head">
+        <span class="sec-head__idx">[04]</span>
+        <h2 class="sec-head__title">Projects</h2>
+        <p class="sec-head__cap" data-i18n="proj.cap">// закреплённые проекты с&nbsp;GitHub</p>
+      </header>
+      <div class="ruler" aria-hidden="true"></div>
+
+      <article class="win" id="projects" data-task="projects" data-reveal>
+        <header class="win__bar">
+          <span class="win__ico" data-icon="folder" data-size="16"></span>
+          <span class="win__name">C:\VD\PROJECTS</span>
+          <span class="win__grip" aria-hidden="true"></span>
+        </header>
+        <div class="win__toolbar addr">
+          <span class="addr__label" data-i18n="proj.addr">Адрес</span>
+          <a class="addr__field" href="https://github.com/VladimirDonskov" target="_blank" rel="noopener">https://github.com/VladimirDonskov</a>
+          <button class="btn btn--sm" type="button" id="reposReload" aria-label="Обновить">↻</button>
+        </div>
+        <nav class="win__toolbar qlinks" aria-label="Ссылки на проекты">
+          <span class="addr__label" data-i18n="proj.links">Ссылки</span>
+          <div class="qlinks__list" id="repoLinks"></div>
+        </nav>
+        <div class="win__body">
+          <ul class="projs" id="repos"></ul>
+        </div>
+        <footer class="win__status">
+          <span id="reposStatus">-</span>
+          <span class="push" id="reposSource">github.com/VladimirDonskov</span>
+        </footer>
+      </article>
+    </section>
+
+    <!-- ============ 05 EDUCATION ============ -->
+    <section class="section" id="edu-sec">
+      <header class="sec-head">
+        <span class="sec-head__idx">[05]</span>
+        <h2 class="sec-head__title">Education</h2>
+        <p class="sec-head__cap" data-i18n="edu.cap">// образование и&nbsp;языки</p>
+      </header>
+      <div class="ruler" aria-hidden="true"></div>
+
+      <div class="pair">
+        <article class="win" id="edu" data-task="edu.dat" data-reveal>
+          <header class="win__bar">
+            <span class="win__ico" data-icon="cap" data-size="16"></span>
+            <span class="win__name">edu.dat</span>
+            <span class="win__grip" aria-hidden="true"></span>
+          </header>
+          <div class="win__body edu">
+            <div class="edu__top">
+              <span class="edu__icon" data-icon="cap" data-size="64"></span>
+              <p class="edu__uni">ITMO</p>
+            </div>
+            <p class="edu__full">ITMO University - Saint Petersburg National Research University of Information Technologies, Mechanics and Optics</p>
+            <dl class="specs specs--edu">
+              <div><dt data-i18n="edu.prog">Направление</dt><dd data-i18n="edu.prog.v">Разработка программного обеспечения</dd></div>
+              <div><dt data-i18n="edu.city">Город</dt><dd data-i18n="sys.base">Санкт-Петербург</dd></div>
+              <div><dt data-i18n="edu.status">Статус</dt><dd data-i18n="edu.status.v">Студент</dd></div>
+            </dl>
+            <div class="indet" role="img" aria-label="in progress"><span>IN PROGRESS</span></div>
+          </div>
+        </article>
+
+        <article class="win" id="locale" data-task="locale.cfg" data-reveal>
+          <header class="win__bar">
+            <span class="win__ico" data-icon="globe" data-size="16"></span>
+            <span class="win__name">locale.cfg</span>
+            <span class="win__grip" aria-hidden="true"></span>
+          </header>
+          <div class="win__body locale">
+            <div class="lang">
+              <span class="lang__code">RU</span>
+              <div class="lang__info">
+                <p class="lang__name"><span data-i18n="lang.ru">Русский</span><span class="lang__lvl" data-i18n="lang.native">родной</span></p>
+                <div class="meter" data-level="6" role="img" aria-label="Native"></div>
+              </div>
+            </div>
+            <div class="lang">
+              <span class="lang__code">EN</span>
+              <div class="lang__info">
+                <p class="lang__name"><span data-i18n="lang.en">Английский</span><span class="lang__lvl">B2</span></p>
+                <div class="meter" data-level="4" role="img" aria-label="B2"></div>
+              </div>
+            </div>
+            <div class="lang">
+              <span class="lang__code">IT</span>
+              <div class="lang__info">
+                <p class="lang__name"><span data-i18n="lang.it">Итальянский</span><span class="lang__lvl">B1</span></p>
+                <div class="meter" data-level="3" role="img" aria-label="B1"></div>
+              </div>
+            </div>
+            <div class="scale" aria-hidden="true"><span></span><span>A1</span><span>A2</span><span>B1</span><span>B2</span><span>C1</span><span>C2</span></div>
+          </div>
+          <footer class="win__status">
+            <span>CEFR</span>
+            <span class="push">3 locales</span>
+          </footer>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ 06 CONTACT ============ -->
+    <section class="section" id="contact-sec">
+      <header class="sec-head">
+        <span class="sec-head__idx">[06]</span>
+        <h2 class="sec-head__title">Contact</h2>
+        <p class="sec-head__cap" data-i18n="contact.cap">// связаться со&nbsp;мной</p>
+      </header>
+      <div class="ruler" aria-hidden="true"></div>
+
+      <article class="win win--contact" id="contact" data-task="contact.msg" data-reveal>
+        <header class="win__bar">
+          <span class="win__ico" data-icon="mail" data-size="16"></span>
+          <span class="win__name">new_message.msg</span>
+          <span class="win__grip" aria-hidden="true"></span>
+        </header>
+        <div class="win__body contact">
+          <div class="mailhead">
+            <div><span class="mailhead__k" data-i18n="contact.to">Кому:</span><span>Vladimir Donskov &lt;donskov.vd@gmail.com&gt;</span></div>
+            <div><span class="mailhead__k" data-i18n="contact.subj">Тема:</span><span data-i18n="contact.subj.v">проект · сотрудничество · идея</span></div>
+          </div>
+          <div class="contact__top">
+            <p class="contact__big" data-i18n="contact.big">Есть идея, проект или&nbsp;задача? <mark>Напишите</mark>&nbsp;- обсудим.</p>
+            <div class="contact__art" aria-hidden="true">
+              <svg class="contact__trail" viewBox="0 0 64 48" shape-rendering="crispEdges">
+                <rect x="0" y="44" width="2" height="2"/><rect x="6" y="44" width="2" height="2"/><rect x="12" y="43" width="2" height="2"/>
+                <rect x="18" y="41" width="2" height="2"/><rect x="23" y="38" width="2" height="2"/><rect x="28" y="34" width="2" height="2"/>
+                <rect x="32" y="30" width="2" height="2"/><rect x="36" y="26" width="2" height="2"/><rect x="40" y="22" width="2" height="2"/>
+                <rect x="44" y="18" width="2" height="2"/><rect x="48" y="15" width="2" height="2"/>
+              </svg>
+              <span class="contact__plane" data-icon="plane" data-size="128"></span>
+            </div>
+          </div>
+          <ul class="links">
+            <li class="links__row">
+              <a class="link" href="https://t.me/CipaVibe" target="_blank" rel="noopener">
+                <span class="link__idx">01</span>
+                <span class="link__ico" data-icon="plane" data-size="32"></span>
+                <span class="link__label">Telegram</span>
+                <span class="link__val">@CipaVibe</span>
+                <span class="link__arr" aria-hidden="true">↗</span>
+              </a>
+            </li>
+            <li class="links__row links__row--copy">
+              <a class="link" href="mailto:donskov.vd@gmail.com">
+                <span class="link__idx">02</span>
+                <span class="link__ico" data-icon="mail" data-size="32"></span>
+                <span class="link__label">E-mail</span>
+                <span class="link__val">donskov.vd@gmail.com</span>
+                <span class="link__arr" aria-hidden="true">↗</span>
+              </a>
+              <button class="btn btn--sm copy" type="button" data-copy="donskov.vd@gmail.com"><span data-i18n="copy">Копировать</span></button>
+            </li>
+            <li class="links__row">
+              <a class="link" href="https://github.com/VladimirDonskov" target="_blank" rel="noopener">
+                <span class="link__idx">03</span>
+                <span class="link__ico" data-icon="branch" data-size="32"></span>
+                <span class="link__label">GitHub</span>
+                <span class="link__val">VladimirDonskov</span>
+                <span class="link__arr" aria-hidden="true">↗</span>
+              </a>
+            </li>
+            <li class="links__row">
+              <a class="link link--grab" href="https://t.me/GrabYouOfficial" target="_blank" rel="noopener">
+                <span class="link__idx">04</span>
+                <span class="link__ico" data-icon="megaphone" data-size="32"></span>
+                <span class="link__label" data-i18n="contact.channel">Канал GrabYou</span>
+                <span class="link__val">@GrabYouOfficial</span>
+                <span class="link__arr" aria-hidden="true">↗</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <footer class="win__status">
+          <span><i class="led"></i>ONLINE</span>
+          <span id="localTime">SPB -:-</span>
+          <span class="push hide-sm" data-i18n="contact.count">4 канала связи</span>
+        </footer>
+      </article>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="footer">
+      <div class="footer__mark" id="footMark" aria-hidden="true">DONSKOV</div>
+      <div class="footer__row">
+        <span>© 2026 Vladimir Donskov</span>
+        <span>VD·OS build 26.10.17</span>
+        <span class="hide-sm" data-i18n="foot.made">собрано вручную, без шаблонов</span>
+        <button class="btn btn--sm" type="button" data-action="shutdown"><span data-icon="power" data-size="16"></span><span data-i18n="foot.off">Завершение работы</span></button>
+      </div>
+    </footer>
+  </main>
+
+  <!-- ============ TASKBAR ============ -->
+  <nav class="taskbar" aria-label="Панель задач">
+    <button class="tb-start" type="button" id="startBtn" aria-haspopup="true" aria-expanded="false" aria-controls="startMenu">
+      <span data-icon="logo" data-size="20"></span><span>START</span>
+    </button>
+    <button class="tb-run" type="button" data-action="terminal" aria-label="run.exe" title="run.exe (Ctrl+K)">&gt;_</button>
+    <div class="tb-tasks" id="tasks"></div>
+    <div class="tray">
+      <span class="tray__online"><i class="led"></i><span class="hide-sm">ONLINE</span></span>
+      <button class="tray__btn" type="button" id="langBtn" title="RU / EN">RU</button>
+      <button class="tray__btn" type="button" id="themeBtn" aria-label="Тема" title="Paper / Graphite"><span class="theme-glyph" aria-hidden="true"></span></button>
+      <button class="tray__btn hide-sm" type="button" data-action="settings" aria-label="user.config" title="user.config"><span data-icon="gear" data-size="16"></span></button>
+      <time class="tray__clock" id="clock">--:--</time>
+    </div>
+  </nav>
+
+  <!-- ============ START MENU ============ -->
+  <div class="startmenu" id="startMenu" hidden>
+    <div class="startmenu__band" aria-hidden="true"><span>VD·OS</span><b>26</b></div>
+    <div class="startmenu__items" role="menu" aria-label="START">
+      <a class="sm-item" role="menuitem" href="#about"><span data-icon="txt" data-size="20"></span>about.txt</a>
+      <a class="sm-item" role="menuitem" href="#stack"><span data-icon="chip" data-size="20"></span>stack.sys</a>
+      <a class="sm-item" role="menuitem" href="#grabyou"><span data-icon="bag" data-size="20"></span>grabyou.exe</a>
+      <a class="sm-item" role="menuitem" href="#projects"><span data-icon="folder" data-size="20"></span>projects</a>
+      <a class="sm-item" role="menuitem" href="#edu"><span data-icon="cap" data-size="20"></span>edu.dat</a>
+      <a class="sm-item" role="menuitem" href="#contact"><span data-icon="mail" data-size="20"></span>contact.msg</a>
+      <span class="sm-sep" role="separator"></span>
+      <a class="sm-item" role="menuitem" href="https://t.me/CipaVibe" target="_blank" rel="noopener"><span data-icon="plane" data-size="20"></span>telegram.lnk<span class="sm-ext">↗</span></a>
+      <a class="sm-item" role="menuitem" href="https://github.com/VladimirDonskov" target="_blank" rel="noopener"><span data-icon="branch" data-size="20"></span>github.lnk<span class="sm-ext">↗</span></a>
+      <a class="sm-item" role="menuitem" href="mailto:donskov.vd@gmail.com"><span data-icon="mail" data-size="20"></span>mail.lnk<span class="sm-ext">↗</span></a>
+      <span class="sm-sep" role="separator"></span>
+      <button class="sm-item" role="menuitem" type="button" data-action="terminal"><span data-icon="terminal" data-size="20"></span>run.exe<span class="sm-ext">Ctrl+K</span></button>
+      <button class="sm-item" role="menuitem" type="button" data-action="settings"><span data-icon="gear" data-size="20"></span>user.config</button>
+      <span class="sm-sep" role="separator"></span>
+      <button class="sm-item" role="menuitem" type="button" data-action="shutdown"><span data-icon="power" data-size="20"></span><span data-i18n="foot.off">Завершение работы</span>…</button>
+    </div>
+  </div>
+
+  <!-- ============ TERMINAL ============ -->
+  <dialog class="win win--dialog win--term" id="term" aria-labelledby="termTitle">
+    <header class="win__bar">
+      <span class="win__ico" data-icon="terminal" data-size="16"></span>
+      <span class="win__name" id="termTitle">run.exe - C:\USERS\VLADIMIR</span>
+      <span class="win__grip" aria-hidden="true"></span>
+      <span class="win__ctrl"><button class="wbtn" type="button" data-close aria-label="Закрыть"><span data-icon="ctl-close" data-size="8"></span></button></span>
+    </header>
+    <div class="term" id="termBody">
+      <div class="term__out" id="termOut" aria-live="polite"></div>
+      <form class="term__in" id="termForm" autocomplete="off">
+        <label class="term__ps" for="termInput">vd@os:~$</label>
+        <input id="termInput" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" enterkeyhint="go">
+      </form>
+    </div>
+    <footer class="win__status">
+      <span data-i18n="term.s1">help - команды</span>
+      <span class="hide-sm" data-i18n="term.s2">↑↓ история</span>
+      <span class="hide-sm" data-i18n="term.s3">Tab - дополнение</span>
+      <span class="push">Esc</span>
+    </footer>
+  </dialog>
+
+  <!-- ============ SETTINGS ============ -->
+  <dialog class="win win--dialog win--cfg" id="settings" aria-labelledby="cfgTitle">
+    <header class="win__bar">
+      <span class="win__ico" data-icon="gear" data-size="16"></span>
+      <span class="win__name" id="cfgTitle">user.config - <span data-i18n="cfg.title">параметры</span></span>
+      <span class="win__grip" aria-hidden="true"></span>
+      <span class="win__ctrl"><button class="wbtn" type="button" data-close aria-label="Закрыть"><span data-icon="ctl-close" data-size="8"></span></button></span>
+    </header>
+    <form class="cfg" id="cfgForm" method="dialog">
+      <fieldset>
+        <legend data-i18n="cfg.look">Оформление</legend>
+        <div class="cfg__row">
+          <span data-i18n="cfg.theme">Тема</span>
+          <span class="seg">
+            <label><input type="radio" name="theme" value="light"><span>PAPER</span></label>
+            <label><input type="radio" name="theme" value="dark"><span>GRAPHITE</span></label>
+          </span>
+        </div>
+        <div class="cfg__row">
+          <span data-i18n="cfg.lang">Язык</span>
+          <span class="seg">
+            <label><input type="radio" name="lang" value="ru"><span>RU</span></label>
+            <label><input type="radio" name="lang" value="en"><span>EN</span></label>
+          </span>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend data-i18n="cfg.fx">Эффекты</legend>
+        <label class="switch"><input type="checkbox" name="motion"><span data-i18n="cfg.motion">Анимации интерфейса</span></label>
+        <label class="switch"><input type="checkbox" name="crt"><span data-i18n="cfg.crt">CRT-развёртка</span></label>
+        <label class="switch"><input type="checkbox" name="sound"><span data-i18n="cfg.sound">Звуки кнопок</span></label>
+      </fieldset>
+      <div class="cfg__foot">
+        <span class="cfg__ver">interface.sys v2.6 · build 26.10.17</span>
+        <button class="btn btn--accent btn--sm" value="ok">OK</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- ============ SMALL DIALOG ============ -->
+  <dialog class="win win--dialog win--msg" id="msgbox" aria-labelledby="msgTitle">
+    <header class="win__bar">
+      <span class="win__ico" data-icon="trash" data-size="16"></span>
+      <span class="win__name" id="msgTitle">recycle.bin</span>
+      <span class="win__grip" aria-hidden="true"></span>
+      <span class="win__ctrl"><button class="wbtn" type="button" data-close aria-label="Закрыть"><span data-icon="ctl-close" data-size="8"></span></button></span>
+    </header>
+    <form class="msg" method="dialog">
+      <span class="msg__icon" data-icon="trash" data-size="48"></span>
+      <p class="msg__text" data-i18n="trash.text">Корзина пуста.<br>Весь legacy-код уже отрефакторен.</p>
+      <div class="msg__foot"><button class="btn btn--sm btn--accent" value="ok">OK</button></div>
+    </form>
+  </dialog>
+
+  <!-- ============ NOTIFICATION ============ -->
+  <aside class="win toast" id="toast" hidden aria-live="polite">
+    <header class="win__bar">
+      <span class="win__ico" data-icon="bubble" data-size="16"></span>
+      <span class="win__name">message.ntf</span>
+      <span class="win__grip" aria-hidden="true"></span>
+      <span class="win__ctrl"><button class="wbtn" type="button" id="toastClose" aria-label="Закрыть"><span data-icon="ctl-close" data-size="8"></span></button></span>
+    </header>
+    <div class="toast__body">
+      <span data-icon="bubble" data-size="32"></span>
+      <p data-i18n="toast.text"><b>1 новое сообщение</b><br>Есть проект или идея? Напишите в&nbsp;Telegram.</p>
+    </div>
+    <div class="toast__foot">
+      <a class="btn btn--sm btn--accent" href="https://t.me/CipaVibe" target="_blank" rel="noopener" id="toastOpen"><span data-i18n="toast.open">Открыть</span></a>
+      <button class="btn btn--sm" type="button" id="toastLater"><span data-i18n="toast.later">Позже</span></button>
+    </div>
+  </aside>
+
+  <div class="notify" id="notify" role="status" aria-live="polite"></div>
+
+  <!-- ============ SHUTDOWN ============ -->
+  <div class="shutdown" id="shutdown" hidden>
+    <div class="shutdown__inner">
+      <p class="shutdown__small">VD·OS · SHUTDOWN COMPLETE</p>
+      <p class="shutdown__big" data-i18n="off.big">Теперь питание компьютера можно отключить.</p>
+      <button class="btn btn--accent" type="button" id="powerOn"><span data-icon="power" data-size="20"></span><span data-i18n="off.on">Включить</span></button>
+    </div>
+  </div>
+
+  <script src="js/icons.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
