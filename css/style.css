@@ -262,19 +262,7 @@ body {
   background: repeating-linear-gradient(-45deg, transparent 0 8px, var(--line-soft) 8px 9px);
 }
 
-/* launch animation: a dashed zoom-rect, then the window draws itself */
-html.js .win[data-reveal]:not(.is-open) { visibility: hidden; }
-.win.is-launching { visibility: hidden; }
-.win.is-launching::after {
-  content: ""; visibility: visible; position: absolute; inset: -2px; z-index: 5;
-  border: 2px dashed var(--line); pointer-events: none;
-  animation: zoomrect .2s steps(4) both;
-}
-@keyframes zoomrect {
-  from { transform: scale(.18); transform-origin: var(--zx, 50%) var(--zy, 50%); opacity: 1; }
-  to { transform: scale(1); opacity: 1; }
-}
-.win.is-open { animation: winopen .34s steps(6) backwards; }
+/* section windows appear at once; this draw-in is used only by dialogs and the toast */
 @keyframes winopen {
   from { clip-path: inset(0 100% 100% 0); }
   to { clip-path: inset(0 -16px -16px 0); }

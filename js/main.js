@@ -254,18 +254,10 @@
 
   /* ---------- launch animation ---------- */
   function launch(w, delay) {
+    /* no draw-in: the window is simply there; vd:open still starts the progress fills */
     if (!w) return;
-    if (!motion()) { w.classList.add("is-open"); w.dispatchEvent(new CustomEvent("vd:open")); return; }
-    setTimeout(() => {
-      w.classList.remove("is-open");
-      w.classList.add("is-launching");
-      setTimeout(() => {
-        w.classList.remove("is-launching");
-        void w.offsetWidth;
-        w.classList.add("is-open");
-        w.dispatchEvent(new CustomEvent("vd:open"));
-      }, 200);
-    }, delay || 0);
+    w.classList.add("is-open");
+    w.dispatchEvent(new CustomEvent("vd:open"));
   }
 
   const revealIO = "IntersectionObserver" in window ? new IntersectionObserver((entries) => {
@@ -379,12 +371,9 @@
   }
   $$(".dicon").forEach((ic) => {
     ic.addEventListener("click", (e) => {
-      /* keyboard, touch, or a second click on a selected icon opens it */
-      if (e.detail === 0 || !mqFine.matches || ic.classList.contains("is-selected")) { activateIcon(ic); return; }
-      $$(".dicon.is-selected").forEach((x) => x.classList.remove("is-selected"));
-      ic.classList.add("is-selected");
+      /* one click opens */
+      activateIcon(ic);
     });
-    ic.addEventListener("dblclick", () => activateIcon(ic));
   });
   document.addEventListener("pointerdown", (e) => {
     if (!e.target.closest(".dicon")) $$(".dicon.is-selected").forEach((x) => x.classList.remove("is-selected"));
