@@ -242,7 +242,8 @@ body {
 
 /* state: minimised / maximised / closed */
 .win.is-min > :not(.win__bar) { display: none !important; }
-.win.is-min { box-shadow: 3px 3px 0 var(--shadow); }
+/* a rolled-up window shrinks to its title bar, even where the grid stretches it */
+.win.is-min { box-shadow: 3px 3px 0 var(--shadow); align-self: start !important; flex: none; min-height: 0; }
 .win.is-max {
   position: fixed !important; z-index: 80;
   inset: 12px 12px calc(var(--tb-h) + 12px) 12px;
@@ -334,12 +335,7 @@ body {
 .dicon__img { position: relative; }
 .dicon__label { padding: 2px 5px; max-width: 100%; overflow-wrap: anywhere; }
 .dicon:hover .dicon__label { background: var(--surface); outline: 1px solid var(--line); }
-.dicon.is-selected .dicon__label { background: var(--text); color: var(--surface); outline: 0; }
-.dicon.is-selected .dicon__img::after {
-  content: ""; position: absolute; inset: 0;
-  background: repeating-conic-gradient(var(--accent) 0 25%, transparent 0 50%) 0 0 / 4px 4px;
-  mix-blend-mode: multiply; opacity: .9;
-}
+.dicon:active .dicon__label { background: var(--sel-bg); color: var(--sel-fg); outline: 0; }
 .dicon:focus-visible { outline-offset: 0; }
 
 /* hero window */

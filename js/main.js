@@ -364,19 +364,12 @@
     else if (a === "trash") openDialog($("#msgbox"));
     else if (a === "shutdown") shutdown();
   }
-  function activateIcon(ic) {
-    ic.classList.remove("is-selected");
-    if (ic.dataset.open) openWin($(ic.dataset.open), true);
-    else if (ic.dataset.action) runAction(ic.dataset.action);
-  }
+  /* desktop shortcuts open on a single click */
   $$(".dicon").forEach((ic) => {
-    ic.addEventListener("click", (e) => {
-      /* one click opens */
-      activateIcon(ic);
+    ic.addEventListener("click", () => {
+      if (ic.dataset.open) openWin($(ic.dataset.open), true);
+      else if (ic.dataset.action) runAction(ic.dataset.action);
     });
-  });
-  document.addEventListener("pointerdown", (e) => {
-    if (!e.target.closest(".dicon")) $$(".dicon.is-selected").forEach((x) => x.classList.remove("is-selected"));
   });
   $$("[data-action]").forEach((el) => {
     if (el.classList.contains("dicon") || el.closest("#startMenu")) return;
