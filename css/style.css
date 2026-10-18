@@ -771,8 +771,6 @@ html.js .win[data-reveal]:not(.is-open) { visibility: hidden; }
 .link__arr { font: 700 26px/1 var(--f-mono); transition: transform .08s steps(2); }
 .link:hover { background: var(--accent); color: #FFFFFF; }
 .link:hover .link__idx { color: #FFFFFF; }
-.link--grab:hover { background: var(--grab); color: var(--on-grab); }
-.link--grab:hover .link__idx { color: var(--on-grab); }
 .link:hover .link__arr { transform: translate(4px, -4px); }
 .copy { position: absolute; right: clamp(16px, 2.4vw, 28px); top: 50%; transform: translateY(-50%); }
 .copy:active { transform: translate(3px, calc(-50% + 3px)); }
