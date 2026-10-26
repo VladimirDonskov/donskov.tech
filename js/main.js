@@ -133,7 +133,8 @@
   /* =========================================================
      WINDOW MANAGER
      ========================================================= */
-  const allWins = $$(".win[data-task], .win--side");
+  /* every window gets controls; only the main ones get a taskbar button */
+  const allWins = $$(".win[data-reveal]");
   const taskWins = $$(".win[data-task]");
   const ghosts = new Set();
   let zTop = 10;
@@ -757,7 +758,7 @@
     const cards = PINNED.map((r, i) => `
       <li><a class="proj" href="${GH}/${esc(r.name)}" target="_blank" rel="noopener">
         <span class="proj__top"><span data-icon="folder" data-size="40"></span><span class="proj__idx">${pad(i + 1)}</span></span>
-        <span class="proj__name">${esc(r.name)}</span>
+        <h3 class="proj__name">${esc(r.name)}</h3>
         <span class="proj__url">github.com/VladimirDonskov/${esc(r.name)}</span>
         <span class="proj__desc">${esc(r[prefs.lang] || r.ru)}</span>
         <span class="proj__tags">${r.tags.map((t) => `<i>${esc(t)}</i>`).join("")}</span>
