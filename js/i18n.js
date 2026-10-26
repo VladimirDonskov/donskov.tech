@@ -5,7 +5,6 @@ window.I18N = {
   STATIC: {
     en: {
       "skip": "Skip to content",
-      "boot.skip": "press any key to skip",
       "hero.lead": "Software developer &amp; entrepreneur. I design backends in&nbsp;Java and&nbsp;Python, build APIs and databases&nbsp;- and launch my own products.",
       "cta.tg": "Message on Telegram",
       "sys.role": "Developer · Entrepreneur",
@@ -69,10 +68,6 @@ window.I18N = {
       "copy": "Copy",
       "contact.count": "3 channels",
       "foot.made": "hand-built, no templates",
-      "foot.off": "Shut down",
-      "term.s1": "help - commands",
-      "term.s2": "↑↓ history",
-      "term.s3": "Tab - complete",
       "cfg.title": "settings",
       "cfg.look": "Appearance",
       "cfg.theme": "Theme",
@@ -81,12 +76,6 @@ window.I18N = {
       "cfg.motion": "Interface animations",
       "cfg.crt": "CRT scanlines",
       "cfg.sound": "Button sounds",
-      "trash.text": "Recycle bin is empty.<br>All legacy code has already been refactored.",
-      "toast.text": "<b>1 new message</b><br>Got a project or an idea? Message me on&nbsp;Telegram.",
-      "toast.open": "Open",
-      "toast.later": "Later",
-      "off.big": "It’s now safe to turn off your computer.",
-      "off.on": "Power on"
     }
   },
 
@@ -120,34 +109,6 @@ window.I18N = {
       localTime: "СПБ {t} · UTC+3",
       themeName: { light: "PAPER", dark: "GRAPHITE" },
       themeAria: "Тема",
-      termHello: "VD·OS terminal 2.6 - введите <b>help</b>, чтобы увидеть команды.",
-      termUnknown: "команда не найдена: {c}. Попробуйте <b>help</b>.",
-      termHelp: [
-        ["about", "обо мне"],
-        ["stack", "технологии"],
-        ["grabyou", "мой бизнес"],
-        ["projects", "репозитории"],
-        ["edu", "образование"],
-        ["contact", "контакты"],
-        ["whoami", "кто я"],
-        ["telegram · github · mail · channel", "открыть ссылку"],
-        ["theme [paper|graphite]", "сменить тему"],
-        ["lang [ru|en]", "сменить язык"],
-        ["crt", "CRT-развёртка"],
-        ["date", "текущая дата"],
-        ["clear", "очистить экран"],
-        ["reboot", "перезагрузка"],
-        ["exit", "закрыть терминал"]
-      ],
-      termWho: "Владимир Донсков - разработчик ПО и предприниматель. Backend на Java и Python, основатель GrabYou, студент ИТМО.",
-      termOpen: "открываю {v}…",
-      termGo: "перехожу к {v}…",
-      termTheme: "тема: {v}",
-      termLang: "язык: {v}",
-      termCrt: "crt: {v}",
-      termHire: "доступ разрешён. открываю канал связи с Владимиром…",
-      termSudo: "{u} is not in the sudoers file. This incident will be reported.",
-      termLs: "about.txt  stack.sys  grabyou.exe  projects/  edu.dat  locale.cfg  contact.msg"
     },
     en: {
       roles: ["backend developer", "entrepreneur", "founder of GrabYou", "ITMO student", "java · python · sql"],
@@ -178,34 +139,6 @@ window.I18N = {
       localTime: "SPB {t} · UTC+3",
       themeName: { light: "PAPER", dark: "GRAPHITE" },
       themeAria: "Theme",
-      termHello: "VD·OS terminal 2.6 - type <b>help</b> to list commands.",
-      termUnknown: "command not found: {c}. Try <b>help</b>.",
-      termHelp: [
-        ["about", "about me"],
-        ["stack", "technologies"],
-        ["grabyou", "my business"],
-        ["projects", "repositories"],
-        ["edu", "education"],
-        ["contact", "contacts"],
-        ["whoami", "who am I"],
-        ["telegram · github · mail · channel", "open a link"],
-        ["theme [paper|graphite]", "switch theme"],
-        ["lang [ru|en]", "switch language"],
-        ["crt", "CRT scanlines"],
-        ["date", "current date"],
-        ["clear", "clear screen"],
-        ["reboot", "restart"],
-        ["exit", "close terminal"]
-      ],
-      termWho: "Vladimir Donskov - software developer & entrepreneur. Java & Python backend, founder of GrabYou, ITMO student.",
-      termOpen: "opening {v}…",
-      termGo: "jumping to {v}…",
-      termTheme: "theme: {v}",
-      termLang: "language: {v}",
-      termCrt: "crt: {v}",
-      termHire: "access granted. opening a channel to Vladimir…",
-      termSudo: "{u} is not in the sudoers file. This incident will be reported.",
-      termLs: "about.txt  stack.sys  grabyou.exe  projects/  edu.dat  locale.cfg  contact.msg"
     }
   }
 };

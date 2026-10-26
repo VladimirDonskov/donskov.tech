@@ -158,7 +158,7 @@
       if (k === "max" && w && w.classList.contains("is-max")) k = "restore";
       b.setAttribute("aria-label", L[k]); b.title = L[k];
     });
-    $$(".wbtn[data-close], #toastClose").forEach((b) => { b.setAttribute("aria-label", L.close); b.title = L.close; });
+    $$(".wbtn[data-close]").forEach((b) => { b.setAttribute("aria-label", L.close); b.title = L.close; });
   }
 
   function focusWin(w, raise) {
@@ -360,10 +360,7 @@
      DESKTOP ICONS / START MENU / ACTIONS
      ========================================================= */
   function runAction(a) {
-    if (a === "terminal") openTerm();
-    else if (a === "settings") openSettings();
-    else if (a === "trash") openDialog($("#msgbox"));
-    else if (a === "shutdown") shutdown();
+    if (a === "settings") openSettings();
   }
   /* desktop shortcuts open on a single click */
   $$(".dicon").forEach((ic) => {
@@ -431,9 +428,6 @@
 
   /* ---------- keyboard ---------- */
   document.addEventListener("keydown", (e) => {
-    const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName);
-    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); openTerm(); return; }
-    if (!typing && e.key === "`") { e.preventDefault(); openTerm(); return; }
     if (e.key === "Escape") {
       if (!startMenu.hidden) { toggleStart(false); startBtn.focus(); return; }
       const m = $(".win.is-max");
@@ -614,7 +608,7 @@
       else logT = setTimeout(loop, 2600);
     })();
     function loop() {
-      if (!document.hidden) logLine(LOG_LOOP[logLoopI++ % LOG_LOOP.length]);
+      if (!document.hidden && logEl.offsetParent) logLine(LOG_LOOP[logLoopI++ % LOG_LOOP.length]);
       logT = setTimeout(loop, 3200);
     }
   }
@@ -853,87 +847,6 @@
   }
 
   /* =========================================================
-     TERMINAL
-     ========================================================= */
-  const term = $("#term"), termOut = $("#termOut"), termIn = $("#termInput"), termBody = $("#termBody");
-  let termReady = false;
-  const hist = [];
-  let histI = 0;
-  function tprint(html, cls) {
-    const d = document.createElement("div");
-    if (cls) d.className = cls;
-    d.innerHTML = html;
-    termOut.appendChild(d);
-    termBody.scrollTop = termBody.scrollHeight;
-  }
-  function openTerm() {
-    openDialog(term);
-    if (!termReady) { termReady = true; tprint(D().termHello, "dim"); }
-    setTimeout(() => termIn.focus(), 30);
-  }
-  const go = (sel) => () => {
-    tprint(esc(fmt(D().termGo, { v: sel.slice(1) })), "dim");
-    setTimeout(() => { term.close(); openWin($(sel), true); }, 260);
-  };
-  const openUrl = (u) => () => { tprint(esc(fmt(D().termOpen, { v: u })), "dim"); window.open(u, "_blank", "noopener"); };
-  const CMDS = {
-    help: () => D().termHelp.forEach(([c, d]) => tprint(`<span>${esc(c)}</span><span>${esc(d)}</span>`, "row")),
-    about: go("#about"), stack: go("#stack"), grabyou: go("#grabyou"), projects: go("#projects"),
-    edu: go("#edu"), contact: go("#contact"),
-    whoami: () => tprint(esc(D().termWho)),
-    ls: () => tprint(esc(D().termLs)),
-    telegram: openUrl("https://t.me/CipaVibe"),
-    github: openUrl("https://github.com/VladimirDonskov"),
-    channel: openUrl("https://t.me/GrabYouOfficial"),
-    grabyou_site: openUrl("https://grabyou.ru"),
-    mail: () => { tprint(esc(fmt(D().termOpen, { v: "mailto:donskov.vd@gmail.com" })), "dim"); location.href = "mailto:donskov.vd@gmail.com"; },
-    theme: (a) => {
-      const t = a === "graphite" || a === "dark" ? "dark" : a === "paper" || a === "light" ? "light" : prefs.theme === "dark" ? "light" : "dark";
-      setTheme(t, true); tprint(`<span class="hl">${esc(fmt(D().termTheme, { v: D().themeName[t] }))}</span>`);
-    },
-    lang: (a) => {
-      const l = a === "en" || a === "ru" ? a : prefs.lang === "ru" ? "en" : "ru";
-      setLang(l); tprint(`<span class="hl">${esc(fmt(D().termLang, { v: l.toUpperCase() }))}</span>`);
-    },
-    crt: () => { setCrt(!prefs.crt); tprint(`<span class="hl">${esc(fmt(D().termCrt, { v: prefs.crt ? "ON" : "OFF" }))}</span>`); },
-    date: () => tprint(esc(new Date().toString())),
-    echo: (a, raw) => tprint(esc(raw.replace(/^echo\s*/i, ""))),
-    clear: () => { termOut.innerHTML = ""; },
-    reboot: () => { term.close(); runBoot(true); },
-    exit: () => term.close(),
-    hire: () => { tprint(`<span class="hl">${esc(D().termHire)}</span>`); window.open("https://t.me/CipaVibe", "_blank", "noopener"); },
-    sudo: () => tprint(esc(fmt(D().termSudo, { u: "guest" })), "err"),
-  };
-  const ALIAS = { "?": "help", cls: "clear", dir: "ls", quit: "exit", tg: "telegram", gh: "github", email: "mail", site: "grabyou_site" };
-  $("#termForm").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const raw = termIn.value.trim();
-    termIn.value = "";
-    tprint(`<b>vd@os:~$</b> ${esc(raw)}`, "in");
-    if (!raw) return;
-    hist.push(raw); histI = hist.length;
-    const parts = raw.split(/\s+/);
-    let cmd = parts[0].toLowerCase();
-    cmd = ALIAS[cmd] || cmd;
-    const fn = Object.prototype.hasOwnProperty.call(CMDS, cmd) ? CMDS[cmd] : null;
-    if (fn) fn((parts[1] || "").toLowerCase(), raw);
-    else tprint(fmt(D().termUnknown, { c: esc(parts[0]) }), "err");
-  });
-  termIn.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowUp") { e.preventDefault(); if (histI > 0) termIn.value = hist[--histI]; }
-    else if (e.key === "ArrowDown") { e.preventDefault(); histI = Math.min(hist.length, histI + 1); termIn.value = hist[histI] || ""; }
-    else if (e.key === "Tab") {
-      e.preventDefault();
-      const v = termIn.value.trim().toLowerCase();
-      if (!v) return;
-      const m = Object.keys(CMDS).filter((c) => c.indexOf(v) === 0);
-      if (m.length === 1) termIn.value = m[0] + " ";
-      else if (m.length > 1) tprint(esc(m.join("  ")), "dim");
-    }
-  });
-  termBody.addEventListener("click", () => { if (!getSelection().toString()) termIn.focus(); });
-
-  /* =========================================================
      SETTINGS
      ========================================================= */
   const cfg = $("#settings"), cfgF = $("#cfgForm").elements;
@@ -955,110 +868,19 @@
   });
 
   /* =========================================================
-     TOAST
+     START: the desktop is there at once, no boot screen
      ========================================================= */
-  const toast = $("#toast");
-  function hideToast() { toast.hidden = true; }
-  function showToast() {
-    if ($("dialog[open]") || !$("#shutdown").hidden || !$("#boot").hidden) { setTimeout(showToast, 6000); return; }
-    toast.hidden = false;
-    store.sset("vdos-toast", "1");
-    blip(660, 0.06, "square", 0.03); setTimeout(() => blip(990, 0.06, "square", 0.03), 80);
-  }
-  $("#toastClose").addEventListener("click", hideToast);
-  $("#toastLater").addEventListener("click", hideToast);
-  $("#toastOpen").addEventListener("click", hideToast);
-
-  /* =========================================================
-     BOOT / SHUTDOWN
-     ========================================================= */
-  const BOOT = [
-    ["VD·OS BIOS 2.6  (c) 2026 Vladimir Donskov", ""],
-    ["CPU   : JAVA + PYTHON CORE", "OK"],
-    ["MEM   : 640K - ought to be enough", "OK"],
-    ["DISK  : /home/vladimir", "OK"],
-    ["DB    : postgres · clickhouse · redis", "OK"],
-    ["NET   : t.me/CipaVibe", "OK"],
-    ["SRV   : grabyou.app", "OK"],
-    ["GUI   : starting desktop", "READY"],
-  ];
-  let started = false;
   function startDesktop() {
-    $$("#hello, #sysinfo, #statuslog").forEach((w) => w.classList.remove("is-open"));
-    launch($("#hello"), 0);
-    launch($("#sysinfo"), 170);
-    launch($("#statuslog"), 320);
+    $$("#hello, #sysinfo, #statuslog").forEach((w) => launch(w, 0));
     setTimeout(nameIntro, motion() ? 220 : 0);
     setTimeout(typeLoop, motion() ? 900 : 0);
     startLog();
     focusWin($("#hello"));
-    if (!started) {
-      started = true;
-      $$(".win[data-reveal]").forEach((w) => {
-        if (w.closest(".hero")) return;
-        if (revealIO) revealIO.observe(w); else w.classList.add("is-open");
-      });
-      if (!store.sget("vdos-toast")) setTimeout(showToast, 12000);
-    }
+    $$(".win[data-reveal]").forEach((w) => {
+      if (w.closest(".hero")) return;
+      if (revealIO) revealIO.observe(w); else w.classList.add("is-open");
+    });
   }
-  function runBoot(force) {
-    const boot = $("#boot");
-    if (!force && (store.sget("vdos-boot") || !motion())) { startDesktop(); return; }
-    store.sset("vdos-boot", "1");
-    const linesEl = $("#bootLines"), bar = $("#bootBar");
-    linesEl.innerHTML = ""; bar.innerHTML = "";
-    for (let i = 0; i < 32; i++) bar.appendChild(document.createElement("i"));
-    const cells = $$("i", bar);
-    boot.hidden = false;
-    boot.removeAttribute("aria-hidden");
-    let i = 0, t = 0, done = false;
-    function next() {
-      if (i < BOOT.length) {
-        const [txt, st] = BOOT[i];
-        const row = document.createElement("div");
-        row.innerHTML = `<span>${esc(txt)}</span>${st ? `<span class="lead"></span><span class="ok${st === "READY" ? " go" : ""}">${st}</span>` : ""}`;
-        linesEl.appendChild(row);
-        i++;
-        const fill = Math.round((i / BOOT.length) * cells.length);
-        cells.forEach((c, k) => c.classList.toggle("on", k < fill));
-        blip(420 + i * 60, 0.02, "square", 0.02);
-        t = setTimeout(next, i === 1 ? 260 : 140);
-      } else t = setTimeout(finish, 360);
-    }
-    function finish() {
-      if (done) return;
-      done = true;
-      clearTimeout(t);
-      removeEventListener("keydown", finish);
-      boot.removeEventListener("pointerdown", finish);
-      boot.classList.add("is-out");
-      setTimeout(() => {
-        boot.hidden = true;
-        boot.setAttribute("aria-hidden", "true");
-        boot.classList.remove("is-out");
-        startDesktop();
-      }, 420);
-    }
-    addEventListener("keydown", finish);
-    boot.addEventListener("pointerdown", finish);
-    next();
-  }
-  function shutdown() {
-    toggleStart(false);
-    $$("dialog[open]").forEach((d) => d.close());
-    hideToast();
-    const s = $("#shutdown");
-    s.hidden = false;
-    document.body.style.overflow = "hidden";
-    blip(330, 0.18, "triangle", 0.06);
-    setTimeout(() => $("#powerOn").focus(), 60);
-  }
-  $("#powerOn").addEventListener("click", () => {
-    $("#shutdown").hidden = true;
-    document.body.style.overflow = "";
-    scrollTo({ top: 0, behavior: "auto" });
-    runBoot(true);
-  });
 
   /* =========================================================
      INIT
@@ -1069,5 +891,5 @@
   applyLang();
   syncCfg();
   loadRepos(false);
-  runBoot(false);
+  startDesktop();
 })();

@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Geist:wght@300..900&family=JetBrains+Mono:wght@400..800&family=Pixelify+Sans:wght@500..700&display=swap">
-  <link rel="stylesheet" href="css/style.css?v=20261026a">
+  <link rel="stylesheet" href="css/style.css?v=20261026b">
   <script>
     /* Light by default; dark only if the visitor picked it. Applied before first paint. */
     (function () {
@@ -29,16 +29,6 @@
 </head>
 <body>
   <a class="skip" href="#about-sec" data-i18n="skip">Перейти к содержимому</a>
-
-  <!-- ============ BOOT ============ -->
-  <div class="boot" id="boot" hidden aria-hidden="true">
-    <div class="boot__inner">
-      <div class="boot__logo"><span data-icon="logo" data-size="64"></span><span>VD·OS</span></div>
-      <div class="boot__lines" id="bootLines"></div>
-      <div class="boot__bar" id="bootBar"></div>
-      <p class="boot__skip" data-i18n="boot.skip">нажмите любую клавишу, чтобы пропустить</p>
-    </div>
-  </div>
 
   <div class="crt" aria-hidden="true"></div>
 
@@ -62,9 +52,6 @@
         <button class="dicon" type="button" data-open="#grabyou"><span class="dicon__img" data-icon="bag" data-size="40"></span><span class="dicon__label">grabyou.exe</span></button>
         <button class="dicon" type="button" data-open="#projects"><span class="dicon__img" data-icon="folder" data-size="40"></span><span class="dicon__label">projects</span></button>
         <button class="dicon" type="button" data-open="#contact"><span class="dicon__img" data-icon="mail" data-size="40"></span><span class="dicon__label">contact.msg</span></button>
-        <button class="dicon" type="button" data-action="terminal"><span class="dicon__img" data-icon="terminal" data-size="40"></span><span class="dicon__label">run.exe</span></button>
-        <button class="dicon" type="button" data-action="settings"><span class="dicon__img" data-icon="gear" data-size="40"></span><span class="dicon__label">user.config</span></button>
-        <button class="dicon" type="button" data-action="trash"><span class="dicon__img" data-icon="trash" data-size="40"></span><span class="dicon__label">recycle.bin</span></button>
       </nav>
 
       <article class="win win--hero" id="hello" data-task="hello.exe" data-reveal>
@@ -544,7 +531,6 @@ $ npm i react zustand
         <span>© 2026 Vladimir Donskov</span>
         <span>VD·OS build 26.10.17</span>
         <span class="hide-sm" data-i18n="foot.made">собрано вручную, без шаблонов</span>
-        <button class="btn btn--sm" type="button" data-action="shutdown"><span data-icon="power" data-size="16"></span><span data-i18n="foot.off">Завершение работы</span></button>
       </div>
     </footer>
   </main>
@@ -554,7 +540,6 @@ $ npm i react zustand
     <button class="tb-start" type="button" id="startBtn" aria-haspopup="true" aria-expanded="false" aria-controls="startMenu">
       <span data-icon="logo" data-size="20"></span><span>START</span>
     </button>
-    <button class="tb-run" type="button" data-action="terminal" aria-label="run.exe" title="run.exe (Ctrl+K)">&gt;_</button>
     <div class="tb-tasks" id="tasks"></div>
     <div class="tray">
       <span class="tray__online"><i class="led"></i><span class="hide-sm">ONLINE</span></span>
@@ -580,35 +565,9 @@ $ npm i react zustand
       <a class="sm-item" role="menuitem" href="https://github.com/VladimirDonskov" target="_blank" rel="noopener"><span data-icon="branch" data-size="20"></span>github.lnk<span class="sm-ext">↗</span></a>
       <a class="sm-item" role="menuitem" href="mailto:donskov.vd@gmail.com"><span data-icon="mail" data-size="20"></span>mail.lnk<span class="sm-ext">↗</span></a>
       <span class="sm-sep" role="separator"></span>
-      <button class="sm-item" role="menuitem" type="button" data-action="terminal"><span data-icon="terminal" data-size="20"></span>run.exe<span class="sm-ext">Ctrl+K</span></button>
       <button class="sm-item" role="menuitem" type="button" data-action="settings"><span data-icon="gear" data-size="20"></span>user.config</button>
-      <span class="sm-sep" role="separator"></span>
-      <button class="sm-item" role="menuitem" type="button" data-action="shutdown"><span data-icon="power" data-size="20"></span><span data-i18n="foot.off">Завершение работы</span>…</button>
     </div>
   </div>
-
-  <!-- ============ TERMINAL ============ -->
-  <dialog class="win win--dialog win--term" id="term" aria-labelledby="termTitle">
-    <header class="win__bar">
-      <span class="win__ico" data-icon="terminal" data-size="16"></span>
-      <span class="win__name" id="termTitle">run.exe - C:\USERS\VLADIMIR</span>
-      <span class="win__grip" aria-hidden="true"></span>
-      <span class="win__ctrl"><button class="wbtn" type="button" data-close aria-label="Закрыть"><span data-icon="ctl-close" data-size="8"></span></button></span>
-    </header>
-    <div class="term" id="termBody">
-      <div class="term__out" id="termOut" aria-live="polite"></div>
-      <form class="term__in" id="termForm" autocomplete="off">
-        <label class="term__ps" for="termInput">vd@os:~$</label>
-        <input id="termInput" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" enterkeyhint="go">
-      </form>
-    </div>
-    <footer class="win__status">
-      <span data-i18n="term.s1">help - команды</span>
-      <span class="hide-sm" data-i18n="term.s2">↑↓ история</span>
-      <span class="hide-sm" data-i18n="term.s3">Tab - дополнение</span>
-      <span class="push">Esc</span>
-    </footer>
-  </dialog>
 
   <!-- ============ SETTINGS ============ -->
   <dialog class="win win--dialog win--cfg" id="settings" aria-labelledby="cfgTitle">
@@ -649,52 +608,10 @@ $ npm i react zustand
     </form>
   </dialog>
 
-  <!-- ============ SMALL DIALOG ============ -->
-  <dialog class="win win--dialog win--msg" id="msgbox" aria-labelledby="msgTitle">
-    <header class="win__bar">
-      <span class="win__ico" data-icon="trash" data-size="16"></span>
-      <span class="win__name" id="msgTitle">recycle.bin</span>
-      <span class="win__grip" aria-hidden="true"></span>
-      <span class="win__ctrl"><button class="wbtn" type="button" data-close aria-label="Закрыть"><span data-icon="ctl-close" data-size="8"></span></button></span>
-    </header>
-    <form class="msg" method="dialog">
-      <span class="msg__icon" data-icon="trash" data-size="48"></span>
-      <p class="msg__text" data-i18n="trash.text">Корзина пуста.<br>Весь legacy-код уже отрефакторен.</p>
-      <div class="msg__foot"><button class="btn btn--sm btn--accent" value="ok">OK</button></div>
-    </form>
-  </dialog>
-
-  <!-- ============ NOTIFICATION ============ -->
-  <aside class="win toast" id="toast" hidden aria-live="polite">
-    <header class="win__bar">
-      <span class="win__ico" data-icon="bubble" data-size="16"></span>
-      <span class="win__name">message.ntf</span>
-      <span class="win__grip" aria-hidden="true"></span>
-      <span class="win__ctrl"><button class="wbtn" type="button" id="toastClose" aria-label="Закрыть"><span data-icon="ctl-close" data-size="8"></span></button></span>
-    </header>
-    <div class="toast__body">
-      <span data-icon="bubble" data-size="32"></span>
-      <p data-i18n="toast.text"><b>1 новое сообщение</b><br>Есть проект или идея? Напишите в&nbsp;Telegram.</p>
-    </div>
-    <div class="toast__foot">
-      <a class="btn btn--sm btn--accent" href="https://t.me/CipaVibe" target="_blank" rel="noopener" id="toastOpen"><span data-i18n="toast.open">Открыть</span></a>
-      <button class="btn btn--sm" type="button" id="toastLater"><span data-i18n="toast.later">Позже</span></button>
-    </div>
-  </aside>
-
   <div class="notify" id="notify" role="status" aria-live="polite"></div>
 
-  <!-- ============ SHUTDOWN ============ -->
-  <div class="shutdown" id="shutdown" hidden>
-    <div class="shutdown__inner">
-      <p class="shutdown__small">VD·OS · SHUTDOWN COMPLETE</p>
-      <p class="shutdown__big" data-i18n="off.big">Теперь питание компьютера можно отключить.</p>
-      <button class="btn btn--accent" type="button" id="powerOn"><span data-icon="power" data-size="20"></span><span data-i18n="off.on">Включить</span></button>
-    </div>
-  </div>
-
-  <script src="js/icons.js?v=20261026a"></script>
-  <script src="js/i18n.js?v=20261026a"></script>
-  <script src="js/main.js?v=20261026a"></script>
+  <script src="js/icons.js?v=20261026b"></script>
+  <script src="js/i18n.js?v=20261026b"></script>
+  <script src="js/main.js?v=20261026b"></script>
 </body>
 </html>
