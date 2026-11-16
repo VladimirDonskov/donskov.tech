@@ -16,12 +16,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Geist:wght@300..900&family=JetBrains+Mono:wght@400..800&family=Pixelify+Sans:wght@500..700&display=swap">
-  <link rel="stylesheet" href="css/style.css?v=20261026b">
+  <link rel="stylesheet" href="css/style.css?v=20261116">
   <script>
     /* Light by default; dark only if the visitor picked it. Applied before first paint. */
     (function () {
       var d = document.documentElement, p = {};
       try { p = JSON.parse(localStorage.getItem("vdos-prefs") || "{}"); } catch (e) {}
+      if (!p || typeof p !== "object" || Array.isArray(p)) p = {};
       d.setAttribute("data-theme", p.theme === "dark" ? "dark" : "light");
       d.className = "js" + (p.crt ? " crt-on" : "");
     })();
@@ -40,18 +41,25 @@
         <span data-icon="logo" data-size="20"></span>
         <b>VD·OS</b><span class="muted">2.6</span>
       </div>
-      <div class="topstrip__path">C:\USERS\VLADIMIR\DESKTOP</div>
+      <nav class="site-nav" aria-label="Разделы сайта">
+        <a href="#about" data-i18n="nav.about">Обо мне</a>
+        <a href="#stack" data-i18n="nav.stack">Навыки</a>
+        <a href="#grabyou">GrabYou</a>
+        <a href="#projects" data-i18n="nav.projects">Проекты</a>
+        <a href="#edu" data-i18n="nav.edu">Образование</a>
+        <a href="#contact" data-i18n="nav.contact">Контакты</a>
+      </nav>
       <div class="topstrip__date"><span class="led"></span><span id="topDate">-</span></div>
     </header>
 
     <!-- ============ HERO / DESKTOP ============ -->
     <section class="hero" aria-label="Рабочий стол">
       <nav class="icons" id="icons" aria-label="Ярлыки">
-        <button class="dicon" type="button" data-open="#about"><span class="dicon__img" data-icon="txt" data-size="40"></span><span class="dicon__label">about.txt</span></button>
-        <button class="dicon" type="button" data-open="#stack"><span class="dicon__img" data-icon="chip" data-size="40"></span><span class="dicon__label">stack.sys</span></button>
-        <button class="dicon" type="button" data-open="#grabyou"><span class="dicon__img" data-icon="bag" data-size="40"></span><span class="dicon__label">grabyou.exe</span></button>
-        <button class="dicon" type="button" data-open="#projects"><span class="dicon__img" data-icon="folder" data-size="40"></span><span class="dicon__label">projects</span></button>
-        <button class="dicon" type="button" data-open="#contact"><span class="dicon__img" data-icon="mail" data-size="40"></span><span class="dicon__label">contact.msg</span></button>
+        <button class="dicon" type="button" data-open="#about"><span class="dicon__img" data-icon="txt" data-size="40"></span><span class="dicon__label" data-i18n="nav.about">Обо мне</span></button>
+        <button class="dicon" type="button" data-open="#stack"><span class="dicon__img" data-icon="chip" data-size="40"></span><span class="dicon__label" data-i18n="nav.stack">Навыки</span></button>
+        <button class="dicon" type="button" data-open="#grabyou"><span class="dicon__img" data-icon="bag" data-size="40"></span><span class="dicon__label">GrabYou</span></button>
+        <button class="dicon" type="button" data-open="#projects"><span class="dicon__img" data-icon="folder" data-size="40"></span><span class="dicon__label" data-i18n="nav.projects">Проекты</span></button>
+        <button class="dicon" type="button" data-open="#contact"><span class="dicon__img" data-icon="mail" data-size="40"></span><span class="dicon__label" data-i18n="nav.contact">Контакты</span></button>
       </nav>
 
       <article class="win win--hero" id="hello" data-task="hello.exe" data-reveal>
@@ -279,9 +287,9 @@ $ npm i react zustand
             </ul>
           </section>
         </div>
-        <footer class="win__status">
+        <footer class="win__status stack-feedback">
           <span id="stackStatus">-</span>
-          <span class="push" id="stackHint" data-i18n="stack.hint">нажмите на&nbsp;клавишу</span>
+          <span id="stackHint" role="status" aria-live="polite" data-i18n="stack.hint">нажмите на&nbsp;клавишу</span>
         </footer>
       </article>
     </section>
@@ -377,9 +385,9 @@ $ npm i react zustand
         <div class="win__body">
           <ul class="projs" id="repos"></ul>
         </div>
-        <footer class="win__status">
+        <footer class="win__status repo-feedback">
           <span id="reposStatus">-</span>
-          <span class="push" id="reposSource">github.com/VladimirDonskov</span>
+          <span id="reposSource" role="status" aria-live="polite">github.com/VladimirDonskov</span>
         </footer>
       </article>
     </section>
@@ -610,8 +618,8 @@ $ npm i react zustand
 
   <div class="notify" id="notify" role="status" aria-live="polite"></div>
 
-  <script src="js/icons.js?v=20261026b"></script>
-  <script src="js/i18n.js?v=20261026b"></script>
-  <script src="js/main.js?v=20261026b"></script>
+  <script src="js/icons.js?v=20261116"></script>
+  <script src="js/i18n.js?v=20261116"></script>
+  <script src="js/main.js?v=20261116"></script>
 </body>
 </html>

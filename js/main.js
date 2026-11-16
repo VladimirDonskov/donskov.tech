@@ -21,14 +21,15 @@
     sset(k, v) { try { sessionStorage.setItem(k, v); } catch (e) { /* private mode */ } },
   };
 
-  const saved = store.get("vdos-prefs", {}) || {};
+  const stored = store.get("vdos-prefs", {});
+  const saved = stored && typeof stored === "object" && !Array.isArray(stored) ? stored : {};
   const prefs = {
     theme: root.dataset.theme === "dark" ? "dark" : "light",
     themeSet: !!saved.theme,
-    lang: saved.lang || ((navigator.language || "ru").toLowerCase().indexOf("ru") === 0 ? "ru" : "en"),
+    lang: ["ru", "en"].includes(saved.lang) ? saved.lang : ((navigator.language || "ru").toLowerCase().indexOf("ru") === 0 ? "ru" : "en"),
     crt: !!saved.crt,
     sound: !!saved.sound,
-    motion: saved.motion != null ? !!saved.motion : !mqReduce.matches,
+    motion: saved.motion !== false,
   };
   function savePrefs() {
     store.set("vdos-prefs", {
@@ -41,7 +42,7 @@
   const fmt = (s, v) => String(s).replace(/\{(\w+)\}/g, (_, k) => (v && v[k] != null ? v[k] : ""));
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const pad = (n) => String(n).padStart(2, "0");
-  const motion = () => prefs.motion;
+  const motion = () => prefs.motion && !mqReduce.matches;
 
   /* ---------- sound ---------- */
   let actx = null;
@@ -80,23 +81,19 @@
      THEME / LANGUAGE / EFFECTS
      ========================================================= */
   const metaTheme = $('meta[name="theme-color"]');
-  function applyTheme(glitch) {
+  function applyTheme() {
     root.dataset.theme = prefs.theme;
     if (metaTheme) metaTheme.content = prefs.theme === "dark" ? "#161615" : "#D8D5CB";
-    if (glitch && motion()) {
-      root.classList.remove("glitching"); void root.offsetWidth;
-      root.classList.add("glitching");
-      setTimeout(() => root.classList.remove("glitching"), 260);
-    }
   }
   function setTheme(t, quiet) {
-    prefs.theme = t; prefs.themeSet = true; savePrefs(); applyTheme(true);
+    prefs.theme = t; prefs.themeSet = true; savePrefs(); applyTheme();
     if (!quiet) notify("THEME: " + D().themeName[t]);
     syncCfg();
   }
 
-  function applyMotion() { root.classList.toggle("reduce-motion", !prefs.motion); }
-  function setMotion(on) { prefs.motion = on; savePrefs(); applyMotion(); if (!on) settleName(); typeLoop(); }
+  function applyMotion() { root.classList.toggle("reduce-motion", !motion()); }
+  function setMotion(on) { prefs.motion = on; savePrefs(); applyMotion(); }
+  mqReduce.addEventListener("change", applyMotion);
   function applyCrt() { root.classList.toggle("crt-on", prefs.crt); }
   function setCrt(on) { prefs.crt = on; savePrefs(); applyCrt(); syncCfg(); }
 
@@ -105,6 +102,7 @@
   const ARIA = [
     [".hero", "aria-label", "Рабочий стол", "Desktop"],
     ["#icons", "aria-label", "Ярлыки", "Shortcuts"],
+    [".site-nav", "aria-label", "Разделы сайта", "Site navigation"],
     [".taskbar", "aria-label", "Панель задач", "Taskbar"],
     ["#stackTabs", "aria-label", "Фильтр", "Filter"],
     ["#reposReload", "aria-label", "Обновить", "Refresh"],
@@ -125,10 +123,11 @@
     updateStackStatus();
     if (lastKey) $("#stackHint").textContent = "> " + D().keys[lastKey];
     renderRepos();
+    $("#typed").textContent = D().roles[0];
     ghosts.forEach((g) => renderGhost(g));
     tick(true);
   }
-  function setLang(l) { prefs.lang = l; savePrefs(); applyLang(); typeLoop(); syncCfg(); }
+  function setLang(l) { prefs.lang = l; savePrefs(); applyLang(); syncCfg(); }
 
   /* =========================================================
      WINDOW MANAGER
@@ -173,6 +172,7 @@
     const on = force != null ? force : !w.classList.contains("is-min");
     if (on && w.classList.contains("is-max")) toggleMax(w, false);
     w.classList.toggle("is-min", on);
+    if (on && w.contains(document.activeElement)) $('.wbtn[data-win="min"]', w).focus({ preventScroll: true });
     syncTasks();
   }
 
@@ -180,6 +180,10 @@
     const on = force != null ? force : !w.classList.contains("is-max");
     if (on === w.classList.contains("is-max")) return;
     if (on) {
+      const previous = $(".win.is-max");
+      if (previous) toggleMax(previous, false);
+      w._focusBeforeMax = document.activeElement;
+      w._maxAttrs = ["role", "aria-modal", "aria-label"].map((name) => [name, w.getAttribute(name)]);
       w.classList.remove("is-min");
       const ph = document.createElement("div");
       ph.className = "win-ph";
@@ -187,12 +191,18 @@
       ph.style.gridArea = getComputedStyle(w).gridArea;
       w.before(ph); w._ph = ph;
       w.classList.add("is-max");
+      w.setAttribute("role", "dialog");
+      w.setAttribute("aria-modal", "true");
+      w.setAttribute("aria-label", $(".win__name", w).textContent);
       document.body.style.overflow = "hidden";
       focusWin(w, true);
+      $('.wbtn[data-win="max"]', w).focus({ preventScroll: true });
     } else {
       w.classList.remove("is-max");
+      w._maxAttrs.forEach(([name, value]) => { if (value == null) w.removeAttribute(name); else w.setAttribute(name, value); });
       if (w._ph) { w._ph.remove(); w._ph = null; }
       if (!$(".win.is-max")) document.body.style.overflow = "";
+      if (w._focusBeforeMax && w._focusBeforeMax.isConnected) w._focusBeforeMax.focus({ preventScroll: true });
     }
     const mb = $('.wbtn[data-win="max"]', w);
     if (mb) { mb.innerHTML = `<span data-icon="ctl-${on ? "restore" : "max"}" data-size="8"></span>`; PI.hydrate(mb); }
@@ -218,6 +228,7 @@
     renderGhost(g);
     w.after(g); ghosts.add(g);
     syncTasks();
+    $("button", g).focus({ preventScroll: true });
   }
 
   function openWin(w, scroll) {
@@ -225,10 +236,15 @@
     if (w._ghost) { ghosts.delete(w._ghost); w._ghost.remove(); w._ghost = null; }
     const wasClosed = w.classList.contains("is-closed");
     w.classList.remove("is-closed", "is-min");
-    if (wasClosed) { w.classList.remove("is-open"); launch(w, 0); }
+    if (wasClosed) { w.classList.remove("is-open"); launch(w); }
     if (scroll) {
       const target = w.closest(".section") || w;
       target.scrollIntoView({ behavior: motion() ? "smooth" : "auto", block: "start" });
+      const heading = $(".sec-head__title", target) || w;
+      heading.setAttribute("tabindex", "-1");
+      heading.focus({ preventScroll: true });
+    } else if (wasClosed) {
+      $('.wbtn[data-win="min"]', w).focus({ preventScroll: true });
     }
     focusWin(w);
   }
@@ -254,7 +270,7 @@
   });
 
   /* ---------- launch animation ---------- */
-  function launch(w, delay) {
+  function launch(w) {
     /* no draw-in: the window is simply there; vd:open still starts the progress fills */
     if (!w) return;
     w.classList.add("is-open");
@@ -262,11 +278,10 @@
   }
 
   const revealIO = "IntersectionObserver" in window ? new IntersectionObserver((entries) => {
-    let i = 0;
     entries.forEach((en) => {
       if (!en.isIntersecting) return;
       revealIO.unobserve(en.target);
-      launch(en.target, i++ * 110);
+      launch(en.target);
     });
   }, { rootMargin: "0px 0px -10% 0px", threshold: 0.04 }) : null;
 
@@ -369,17 +384,33 @@
       else if (ic.dataset.action) runAction(ic.dataset.action);
     });
   });
+  $$(".site-nav a[href^='#']").forEach((a) => {
+    a.addEventListener("click", (e) => {
+      const w = document.getElementById(a.hash.slice(1));
+      if (!w) return;
+      e.preventDefault();
+      history.pushState(null, "", a.hash);
+      openWin(w, true);
+    });
+  });
   $$("[data-action]").forEach((el) => {
     if (el.classList.contains("dicon") || el.closest("#startMenu")) return;
     el.addEventListener("click", () => runAction(el.dataset.action));
   });
 
   const startBtn = $("#startBtn"), startMenu = $("#startMenu");
+  $(".taskbar").addEventListener("pointerdown", () => {
+    const maximized = $(".win.is-max");
+    if (maximized) toggleMax(maximized, false);
+  });
   function toggleStart(open) {
     const on = open != null ? open : startMenu.hidden;
+    const maximized = $(".win.is-max");
+    if (on && maximized) toggleMax(maximized, false);
     startMenu.hidden = !on;
     startBtn.setAttribute("aria-expanded", on ? "true" : "false");
     if (on) { const f = $(".sm-item", startMenu); if (f) f.focus({ preventScroll: true }); }
+    else if (startMenu.contains(document.activeElement)) startBtn.focus({ preventScroll: true });
   }
   startBtn.addEventListener("click", () => toggleStart());
   document.addEventListener("pointerdown", (e) => {
@@ -398,7 +429,12 @@
     const i = items.indexOf(document.activeElement);
     if (e.key === "ArrowDown") { e.preventDefault(); items[(i + 1) % items.length].focus(); }
     else if (e.key === "ArrowUp") { e.preventDefault(); items[(i - 1 + items.length) % items.length].focus(); }
+    else if (e.key === "Home") { e.preventDefault(); items[0].focus(); }
+    else if (e.key === "End") { e.preventDefault(); items[items.length - 1].focus(); }
     else if (e.key === "Escape") { toggleStart(false); startBtn.focus(); }
+  });
+  startMenu.addEventListener("focusout", (e) => {
+    if (e.relatedTarget && !startMenu.contains(e.relatedTarget) && e.relatedTarget !== startBtn) toggleStart(false);
   });
 
   $("#langBtn").addEventListener("click", () => setLang(prefs.lang === "ru" ? "en" : "ru"));
@@ -421,18 +457,31 @@
   function notify(msg) {
     const n = $("#notify");
     n.textContent = msg;
-    n.classList.remove("is-on"); void n.offsetWidth; n.classList.add("is-on");
+    n.classList.add("is-on");
     clearTimeout(notifyT);
     notifyT = setTimeout(() => n.classList.remove("is-on"), 2200);
   }
 
   /* ---------- keyboard ---------- */
   document.addEventListener("keydown", (e) => {
+    const maximized = $(".win.is-max");
+    if (e.key === "Tab" && maximized && !$("dialog[open]")) {
+      const focusable = $$("button:not([disabled]), a[href], input:not([disabled]), [tabindex='0']", maximized)
+        .filter((el) => el.getClientRects().length);
+      const first = focusable[0], last = focusable[focusable.length - 1];
+      if (first && (e.shiftKey ? document.activeElement === first : document.activeElement === last)) {
+        e.preventDefault(); (e.shiftKey ? last : first).focus();
+      }
+    }
     if (e.key === "Escape") {
       if (!startMenu.hidden) { toggleStart(false); startBtn.focus(); return; }
       const m = $(".win.is-max");
       if (m && !$("dialog[open]")) toggleMax(m, false);
     }
+  });
+  document.addEventListener("focusin", (e) => {
+    const w = $(".win.is-max");
+    if (w && !$("dialog[open]") && !w.contains(e.target)) $('.wbtn[data-win="max"]', w).focus({ preventScroll: true });
   });
 
   /* =========================================================
@@ -455,15 +504,9 @@
   });
   const line1 = $$(".ch", nameLines[0]);
   const base = () => (innerWidth < 640 ? { w: 100, g: 850 } : { w: 125, g: 850 });
-  const state = chars.map(() => ({ w: 125, g: 850 }));
-
-  function setChar(c, s) {
-    c.style.fontStretch = s.w + "%";
-    c.style.fontWeight = s.g;
-  }
   function settleName() {
     const b = base();
-    chars.forEach((c, i) => { state[i].w = b.w; state[i].g = b.g; setChar(c, b); });
+    chars.forEach((c) => { c.style.fontStretch = b.w + "%"; c.style.fontWeight = b.g; });
   }
   let fs = 100;
   function fitName() {
@@ -480,14 +523,6 @@
     if (!w || !avail) return;
     fs = Math.max(30, Math.min(250, (100 * avail) / w * 0.985));
     nameEl.style.fontSize = fs.toFixed(1) + "px";
-    cacheCenters();
-  }
-  function cacheCenters() {
-    chars.forEach((c) => {
-      const r = c.getBoundingClientRect();
-      c._cx = r.left + r.width / 2 + scrollX;
-      c._cy = r.top + r.height / 2 + scrollY;
-    });
   }
   if ("ResizeObserver" in window) {
     let lastW = 0;
@@ -497,75 +532,6 @@
     }).observe(nameEl);
   } else addEventListener("resize", fitName);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitName);
-
-  /* letters squash under the pointer - variable-width type as an interface */
-  let pX = 0, pY = 0, near = false, raf = 0;
-  const helloBody = $("#hello .hello");
-  helloBody.addEventListener("pointermove", (e) => {
-    if (!mqFine.matches || !motion() || nameEl.classList.contains("is-intro")) return;
-    pX = e.clientX + scrollX; pY = e.clientY + scrollY; near = true;
-    if (!raf) raf = requestAnimationFrame(frame);
-  });
-  helloBody.addEventListener("pointerleave", () => { near = false; if (!raf) raf = requestAnimationFrame(frame); });
-  function frame() {
-    raf = 0;
-    const b = base(), R = fs * 2.1;
-    let moving = false;
-    chars.forEach((c, i) => {
-      let tw = b.w, tg = b.g;
-      if (near) {
-        const d = Math.hypot(pX - c._cx, (pY - c._cy) * 1.3);
-        const t = Math.max(0, 1 - d / R);
-        const k = t * t * (3 - 2 * t);
-        tw = b.w - k * (b.w - 62);
-        tg = b.g - k * (b.g - 260);
-      }
-      const s = state[i];
-      s.w += (tw - s.w) * 0.24; s.g += (tg - s.g) * 0.24;
-      if (Math.abs(tw - s.w) > 0.4 || Math.abs(tg - s.g) > 2) moving = true; else { s.w = tw; s.g = tg; }
-      /* quantised: the type moves in small hard steps, like an old renderer */
-      setChar(c, { w: Math.round(s.w / 3) * 3, g: Math.round(s.g / 25) * 25 });
-    });
-    if (moving) raf = requestAnimationFrame(frame);
-  }
-  addEventListener("resize", () => { if (!nameEl.classList.contains("is-intro")) cacheCenters(); });
-
-  function nameIntro() {
-    fitName();
-    if (!motion()) return;
-    nameEl.classList.add("is-intro");
-    chars.forEach((c, i) => { c.style.transitionDelay = "0ms"; setChar(c, { w: 62, g: 300 }); });
-    void nameEl.offsetWidth;
-    const b = base();
-    chars.forEach((c, i) => { c.style.transitionDelay = i * 45 + "ms"; setChar(c, b); });
-    setTimeout(() => {
-      nameEl.classList.remove("is-intro");
-      chars.forEach((c) => { c.style.transitionDelay = ""; });
-      cacheCenters();
-    }, 1500);
-  }
-
-  /* typed role */
-  const typedEl = $("#typed");
-  let typeT = 0, roleI = 0;
-  function typeLoop() {
-    clearTimeout(typeT);
-    const roles = D().roles;
-    if (!motion()) { typedEl.textContent = roles[0]; return; }
-    let txt = roles[roleI % roles.length], i = 0, del = false;
-    typedEl.textContent = "";
-    (function step() {
-      if (!del) {
-        i++; typedEl.textContent = txt.slice(0, i);
-        if (i >= txt.length) { del = true; typeT = setTimeout(step, 1900); return; }
-        typeT = setTimeout(step, 42 + Math.random() * 60);
-      } else {
-        i--; typedEl.textContent = txt.slice(0, i);
-        if (i <= 0) { roleI++; txt = D().roles[roleI % D().roles.length]; del = false; typeT = setTimeout(step, 340); return; }
-        typeT = setTimeout(step, 20);
-      }
-    })();
-  }
 
   /* status.log */
   const logEl = $("#log"), logCount = $("#logCount");
@@ -658,10 +624,8 @@
       t.classList.toggle("is-on", on);
       t.setAttribute("aria-pressed", on ? "true" : "false");
     });
-    let match = null;
-    panels.forEach((p) => { const m = p.dataset.cat === f; p.classList.toggle("is-match", m); if (m) match = p; });
+    panels.forEach((p) => { p.hidden = f !== "all" && p.dataset.cat !== f; });
     updateStackStatus();
-    if (match && innerWidth < 1080) match.scrollIntoView({ behavior: motion() ? "smooth" : "auto", block: "nearest" });
   }
   tabs.forEach((t) => t.addEventListener("click", () => setFilter(t.dataset.filter)));
   function updateStackStatus() {
@@ -672,8 +636,10 @@
   }
   let lastKey = null;
   $$(".key").forEach((k) => {
+    k.setAttribute("aria-pressed", "false");
     k.addEventListener("click", () => {
       lastKey = k.dataset.desc;
+      $$(".key").forEach((key) => key.setAttribute("aria-pressed", key === k ? "true" : "false"));
       const h = $("#stackHint");
       h.textContent = "> " + D().keys[lastKey];
     });
@@ -683,29 +649,13 @@
   const pipe = $("#pipeBar");
   for (let i = 0; i < 24; i++) pipe.appendChild(document.createElement("i"));
   function fillPipe() {
-    const cells = $$("i", pipe);
-    cells.forEach((c) => (c.className = ""));
-    let i = 0;
-    const paint = () => {
-      const c = cells[i];
-      if (!c) return;
-      if (i < 18) c.className = "on";
-      else if (i < 21) c.className = "on hot";
-      else if (i === 21) { c.className = "blink"; return; }
-      i++;
-      if (motion()) setTimeout(paint, 40); else paint();
-    };
-    paint();
+    $$("i", pipe).forEach((c, i) => { c.className = i < 18 ? "on" : i < 22 ? "on hot" : ""; });
   }
   $$(".meter").forEach((m) => { for (let i = 0; i < 6; i++) m.appendChild(document.createElement("i")); });
   function fillMeters() {
-    $$(".meter").forEach((m, mi) => {
+    $$(".meter").forEach((m) => {
       const lvl = Number(m.dataset.level);
-      $$("i", m).forEach((c, i) => {
-        if (i >= lvl) return;
-        if (motion()) setTimeout(() => c.classList.add("on"), 200 + mi * 160 + i * 90);
-        else c.classList.add("on");
-      });
+      $$("i", m).forEach((c, i) => c.classList.toggle("on", i < lvl));
     });
   }
   $("#grabyou").addEventListener("vd:open", fillPipe, { once: true });
@@ -731,7 +681,7 @@
       ru: "Эмулятор арифметики IEEE 754 (binary16 и binary32) на битовых операциях: режимы округления, поднормальные числа, FMA и MAD.",
       en: "IEEE 754 arithmetic emulator (binary16 and binary32) on bit operations: rounding modes, subnormals, FMA and MAD." },
   ];
-  let repoDates = {}, repoTotal = 17;
+  let repoDates = {}, repoTotal = null, repoState = "local", repoLoading = false;
   const reposEl = $("#repos");
   function fmtDate(iso) {
     const d = new Date(iso);
@@ -749,6 +699,7 @@
     return w[2];
   }
   function renderRepos() {
+    const focusedHref = reposEl.contains(document.activeElement) ? document.activeElement.getAttribute("href") : null;
     const cards = PINNED.map((r, i) => `
       <li><a class="proj" href="${GH}/${esc(r.name)}" target="_blank" rel="noopener">
         <span class="proj__top"><span data-icon="folder" data-size="40"></span><span class="proj__idx">${pad(i + 1)}</span></span>
@@ -758,47 +709,80 @@
         <span class="proj__tags">${r.tags.map((t) => `<i>${esc(t)}</i>`).join("")}</span>
         <span class="proj__foot"><span>${fmtDate(repoDates[r.name] || r.date)}</span><span>${esc(D().projOpen)} ↗</span></span>
       </a></li>`).join("");
-    const more = Math.max(0, repoTotal - PINNED.length);
+    const more = repoTotal == null ? 0 : Math.max(0, repoTotal - PINNED.length);
     const tile = `
       <li><a class="proj proj--more" href="${GH}?tab=repositories" target="_blank" rel="noopener">
-        <span class="proj__plus">+${more}</span>
-        <span class="proj__more-t">${esc(fmt(D().projMore, { w: plural(more) }))}</span>
+        <span class="proj__plus">${more ? "+" + more : "GH"}</span>
+        <span class="proj__more-t">${esc(more ? fmt(D().projMore, { w: plural(more) }) : D().projAll)}</span>
         <span class="proj__more-l">github.com/VladimirDonskov ↗</span>
       </a></li>`;
     reposEl.innerHTML = cards + tile;
     PI.hydrate(reposEl);
+    if (focusedHref) { const link = $$("a", reposEl).find((a) => a.getAttribute("href") === focusedHref); if (link) link.focus({ preventScroll: true }); }
     const links = $("#repoLinks");
     links.innerHTML = PINNED.map((r) =>
       `<a class="qlink" href="${GH}/${esc(r.name)}" target="_blank" rel="noopener"><span data-icon="folder" data-size="16"></span>${esc(r.name)}</a>`
     ).join("") + `<a class="qlink qlink--all" href="${GH}?tab=repositories" target="_blank" rel="noopener">${esc(D().projAll)} ↗</a>`;
     PI.hydrate(links);
-    $("#reposStatus").textContent = fmt(D().projStatus, { p: PINNED.length, n: repoTotal });
+    updateRepoStatus();
+  }
+  function updateRepoStatus() {
+    $("#reposStatus").textContent = fmt(repoTotal == null || repoTotal < PINNED.length ? D().projLocalStatus : D().projStatus, { p: PINNED.length, n: repoTotal });
+    const source = $("#reposSource");
+    source.dataset.state = repoState;
+    source.textContent = D().repoStates[repoState];
+  }
+  function validRepoCache(data) {
+    return data && Number.isInteger(data.total) && data.total > 0 && data.total <= 100
+      && data.dates && typeof data.dates === "object" && !Array.isArray(data.dates)
+      && Object.keys(data.dates).length === data.total
+      && Object.values(data.dates).every((d) => typeof d === "string" && Number.isFinite(Date.parse(d)));
   }
   async function loadRepos(force) {
+    if (repoLoading) return;
     const btn = $("#reposReload");
+    repoLoading = true;
+    repoState = "loading";
+    btn.disabled = true;
+    btn.setAttribute("aria-busy", "true");
     btn.classList.add("is-spin");
+    updateRepoStatus();
     let data = null;
+    let timeout;
     if (!force) { try { data = JSON.parse(store.sget("vdos-gh") || "null"); } catch (e) { data = null; } }
+    if (!validRepoCache(data)) data = null;
+    const cached = !!data;
     try {
       if (!data) {
         const ctrl = "AbortController" in window ? new AbortController() : null;
-        const to = setTimeout(() => ctrl && ctrl.abort(), 8000);
+        timeout = setTimeout(() => ctrl && ctrl.abort(), 8000);
         const r = await fetch("https://api.github.com/users/VladimirDonskov/repos?per_page=100", {
           headers: { Accept: "application/vnd.github+json" }, signal: ctrl ? ctrl.signal : undefined,
         });
-        clearTimeout(to);
         if (!r.ok) throw new Error("HTTP " + r.status);
         const j = await r.json();
-        if (!Array.isArray(j) || !j.length) throw new Error("empty");
+        if (!Array.isArray(j)) throw new Error("Invalid repository data");
         data = { total: j.length, dates: {} };
-        j.forEach((x) => { data.dates[x.name] = x.pushed_at || x.updated_at; });
-        store.sset("vdos-gh", JSON.stringify(data));
+        j.forEach((x) => {
+          if (!x || typeof x.name !== "string" || !x.name) throw new Error("Invalid repository name");
+          data.dates[x.name] = x.pushed_at || x.updated_at;
+        });
+        if (j.length && !validRepoCache(data)) throw new Error("Invalid repository dates");
+        if (j.length) store.sset("vdos-gh", JSON.stringify(data));
       }
-      repoTotal = data.total;
+      repoTotal = data.total || null;
       repoDates = data.dates;
-    } catch (e) { /* keep the built-in dates */ }
-    renderRepos();
-    setTimeout(() => btn.classList.remove("is-spin"), 300);
+      repoState = data.total ? (cached ? "cached" : "success") : "empty";
+    } catch (e) {
+      repoState = "error";
+    } finally {
+      clearTimeout(timeout);
+      repoLoading = false;
+      btn.disabled = false;
+      btn.setAttribute("aria-busy", "false");
+      btn.classList.remove("is-spin");
+      renderRepos();
+    }
   }
   $("#reposReload").addEventListener("click", () => loadRepos(true));
 
@@ -871,9 +855,8 @@
      START: the desktop is there at once, no boot screen
      ========================================================= */
   function startDesktop() {
-    $$("#hello, #sysinfo, #statuslog").forEach((w) => launch(w, 0));
-    setTimeout(nameIntro, motion() ? 220 : 0);
-    setTimeout(typeLoop, motion() ? 900 : 0);
+    $$("#hello, #sysinfo, #statuslog").forEach((w) => launch(w));
+    fitName();
     startLog();
     focusWin($("#hello"));
     $$(".win[data-reveal]").forEach((w) => {
