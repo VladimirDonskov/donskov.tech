@@ -86,7 +86,7 @@ window.I18N = {
 
   DYN: {
     ru: {
-      roles: ["backend-разработчик", "предприниматель", "основатель GrabYou", "студент ИТМО", "java · python · sql"],
+      roles: ["backend-разработчик", "студент ИТМО", "предприниматель", "основатель GrabYou"],
       chars: "{n} символов",
       stackAll: "{n} объектов · {c} категорий",
       stackSel: "{cat} · {n} объектов",
@@ -125,7 +125,7 @@ window.I18N = {
       themeAria: "Тема",
     },
     en: {
-      roles: ["backend developer", "entrepreneur", "founder of GrabYou", "ITMO student", "java · python · sql"],
+      roles: ["backend developer", "ITMO student", "entrepreneur", "founder of GrabYou"],
       chars: "{n} chars",
       stackAll: "{n} objects · {c} categories",
       stackSel: "{cat} · {n} objects",

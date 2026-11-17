@@ -91,7 +91,15 @@
     syncCfg();
   }
 
-  function applyMotion() { root.classList.toggle("reduce-motion", !motion()); }
+  function applyMotion() {
+    root.classList.toggle("reduce-motion", !motion());
+    restartRoleTyping();
+    if (!motion()) {
+      cancelArrivals(document);
+      pipe.classList.remove("is-drawing");
+      window.scrollTo({ top: scrollY, left: scrollX, behavior: "instant" });
+    }
+  }
   function setMotion(on) { prefs.motion = on; savePrefs(); applyMotion(); }
   mqReduce.addEventListener("change", applyMotion);
   function applyCrt() { root.classList.toggle("crt-on", prefs.crt); }
@@ -123,7 +131,8 @@
     updateStackStatus();
     if (lastKey) $("#stackHint").textContent = "> " + D().keys[lastKey];
     renderRepos();
-    $("#typed").textContent = D().roles[0];
+    $("#roleSummary").textContent = D().roles.join(", ");
+    restartRoleTyping();
     ghosts.forEach((g) => renderGhost(g));
     tick(true);
   }
@@ -172,6 +181,7 @@
     const on = force != null ? force : !w.classList.contains("is-min");
     if (on && w.classList.contains("is-max")) toggleMax(w, false);
     w.classList.toggle("is-min", on);
+    if (!on) arrive($(".win__body", w));
     if (on && w.contains(document.activeElement)) $('.wbtn[data-win="min"]', w).focus({ preventScroll: true });
     syncTasks();
   }
@@ -179,6 +189,7 @@
   function toggleMax(w, force) {
     const on = force != null ? force : !w.classList.contains("is-max");
     if (on === w.classList.contains("is-max")) return;
+    cancelArrivals(w);
     if (on) {
       const previous = $(".win.is-max");
       if (previous) toggleMax(previous, false);
@@ -235,8 +246,10 @@
     if (!w) return;
     if (w._ghost) { ghosts.delete(w._ghost); w._ghost.remove(); w._ghost = null; }
     const wasClosed = w.classList.contains("is-closed");
+    const wasMinimized = w.classList.contains("is-min");
     w.classList.remove("is-closed", "is-min");
-    if (wasClosed) { w.classList.remove("is-open"); launch(w); }
+    if (wasClosed || wasMinimized) arrive($(".win__body", w));
+    if (wasClosed) launch(w);
     if (scroll) {
       const target = w.closest(".section") || w;
       target.scrollIntoView({ behavior: motion() ? "smooth" : "auto", block: "start" });
@@ -270,8 +283,20 @@
   });
 
   /* ---------- launch animation ---------- */
+  const arrivalEase = getComputedStyle(root).getPropertyValue("--ease-step").trim();
+  function cancelArrivals(scope) {
+    scope.getAnimations?.({ subtree: true }).filter((a) => a.id === "vd-arrival").forEach((a) => a.cancel());
+  }
+  function arrive(el, { distance = 10, duration = 240, delay = 0 } = {}) {
+    if (!motion() || !el?.animate) return;
+    cancelArrivals(el);
+    el.animate([
+      { opacity: 0.35, translate: `0 ${distance}px` },
+      { opacity: 1, translate: "0 0" },
+    ], { id: "vd-arrival", duration, delay, easing: arrivalEase, fill: "backwards" });
+  }
+
   function launch(w) {
-    /* no draw-in: the window is simply there; vd:open still starts the progress fills */
     if (!w) return;
     w.classList.add("is-open");
     w.dispatchEvent(new CustomEvent("vd:open"));
@@ -281,7 +306,14 @@
     entries.forEach((en) => {
       if (!en.isIntersecting) return;
       revealIO.unobserve(en.target);
-      launch(en.target);
+      if (en.target === pipe) {
+        if (motion()) pipe.classList.add("is-drawing");
+      } else {
+        launch(en.target);
+        if (!en.target.matches(".is-max, .is-min, .is-closed")) {
+          arrive(en.target, { distance: 12, duration: 360 });
+        }
+      }
     });
   }, { rootMargin: "0px 0px -10% 0px", threshold: 0.04 }) : null;
 
@@ -331,6 +363,7 @@
     let st = null;
     bar.addEventListener("pointerdown", (e) => {
       if (!canDrag() || e.button !== 0 || e.target.closest(".wbtn") || w.classList.contains("is-max")) return;
+      cancelArrivals(w);
       const r = w.getBoundingClientRect();
       st = { x: e.clientX, y: e.clientY, ox: w._dx || 0, oy: w._dy || 0, r };
       bar.setPointerCapture(e.pointerId);
@@ -487,6 +520,44 @@
   /* =========================================================
      HERO
      ========================================================= */
+  const typedRole = $("#typed");
+  let roleTimer;
+  let roleVisible = !("IntersectionObserver" in window);
+
+  function restartRoleTyping() {
+    clearTimeout(roleTimer);
+    const roles = D().roles;
+    if (!motion() || !roleVisible || document.hidden) {
+      typedRole.textContent = roles[0];
+      return;
+    }
+    let index = 0, length = 0, erasing = false;
+    function step() {
+      const role = roles[index];
+      length += erasing ? -1 : 1;
+      typedRole.textContent = role.slice(0, length);
+      let delay = erasing ? 32 : 70;
+      if (length === role.length) {
+        erasing = true;
+        delay = 1800;
+      } else if (length === 0) {
+        index = (index + 1) % roles.length;
+        erasing = false;
+        delay = 260;
+      }
+      roleTimer = setTimeout(step, delay);
+    }
+    step();
+  }
+
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(([entry]) => {
+      roleVisible = entry.isIntersecting;
+      restartRoleTyping();
+    }).observe(typedRole.parentElement);
+  }
+  document.addEventListener("visibilitychange", restartRoleTyping);
+
   const nameEl = $("#heroName");
   const nameLines = $$(".hello__line", nameEl);
   const chars = [];
@@ -645,12 +716,10 @@
     });
   });
 
-  /* pipeline + meters fill when their window opens */
+  /* Draw the stage indicator when the bar itself enters the viewport. */
   const pipe = $("#pipeBar");
   for (let i = 0; i < 24; i++) pipe.appendChild(document.createElement("i"));
-  function fillPipe() {
-    $$("i", pipe).forEach((c, i) => { c.className = i < 18 ? "on" : i < 22 ? "on hot" : ""; });
-  }
+  $$("i", pipe).forEach((c, i) => { c.className = i < 18 ? "on" : i < 22 ? "on hot" : ""; });
   $$(".meter").forEach((m) => { for (let i = 0; i < 6; i++) m.appendChild(document.createElement("i")); });
   function fillMeters() {
     $$(".meter").forEach((m) => {
@@ -658,7 +727,6 @@
       $$("i", m).forEach((c, i) => c.classList.toggle("on", i < lvl));
     });
   }
-  $("#grabyou").addEventListener("vd:open", fillPipe, { once: true });
   $("#locale").addEventListener("vd:open", fillMeters, { once: true });
 
   /* projects - the repos pinned on GitHub; descriptions written from their READMEs.
@@ -857,11 +925,18 @@
   function startDesktop() {
     $$("#hello, #sysinfo, #statuslog").forEach((w) => launch(w));
     fitName();
+    arrive(nameEl, { distance: 22, duration: 520 });
+    arrive($(".hello__grid"), { distance: 12, duration: 420, delay: 90 });
+    if (matchMedia("(min-width: 1241px)").matches) {
+      arrive($("#sysinfo"), { duration: 360, delay: 150 });
+      arrive($("#statuslog"), { duration: 320, delay: 200 });
+    }
+    if (revealIO) revealIO.observe(pipe);
     startLog();
     focusWin($("#hello"));
     $$(".win[data-reveal]").forEach((w) => {
       if (w.closest(".hero")) return;
-      if (revealIO) revealIO.observe(w); else w.classList.add("is-open");
+      if (revealIO) revealIO.observe(w); else launch(w);
     });
   }
 
